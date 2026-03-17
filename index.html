@@ -260,16 +260,16 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 </div>
 <div class="nav-wrap">
   <div class="nav">
-    <button class="nav-btn active" onclick="switchPage('syllabus',this)"><span class="nav-icon">📋</span>大綱</button>
+    <button class="nav-btn" onclick="switchPage('syllabus',this)"><span class="nav-icon">📋</span>大綱</button>
     <button class="nav-btn" onclick="switchPage('assign',this)"><span class="nav-icon">✏️</span>作業</button>
-    <button class="nav-btn" id="nav-announce" onclick="switchPage('announce',this)"><span class="nav-icon">📢</span>公告</button>
+    <button class="nav-btn active" id="nav-announce" onclick="switchPage('announce',this)"><span class="nav-icon">📢</span>公告</button>
     <button class="nav-btn" onclick="switchPage('teacher',this)"><span class="nav-icon">👤</span>老師</button>
     <button class="nav-btn" onclick="switchPage('attend',this)"><span class="nav-icon">✅</span>點名</button>
   </div>
 </div>
 
 <!-- 大綱 -->
-<div id="syllabus" class="page active">
+<div id="syllabus" class="page">
   <div class="timeline-wrap">
     <div class="tl-axis"></div>
     <div id="weeks-list"></div>
@@ -287,7 +287,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 </div>
 
 <!-- 公告欄 -->
-<div id="announce" class="page">
+<div id="announce" class="page active">
   <div class="announce-toolbar">
     <h3>公告欄</h3>
     <button class="announce-add-btn" onclick="toggleAnnounceForm()">＋ 新增公告</button>

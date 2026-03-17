@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>戲劇與劇場導論</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--f-display:'Cormorant Garamond',serif;--f-mono:'Space Mono',monospace;--ink:#1a1614;--paper:#f5f0e8;--accent:#8b2020;--mid:#c4b99a;--light:#ede6d6}
+body{background:var(--paper);font-family:var(--f-mono);color:var(--ink)}
+.app{max-width:480px;margin:0 auto;min-height:100vh}
+.bar{height:6px;background:var(--accent)}
+.header{padding:20px 24px 16px;border-bottom:1px solid var(--mid);position:relative}
+.course-tag{font-size:9px;letter-spacing:4px;color:var(--accent);text-transform:uppercase;margin-bottom:6px}
+.course-title{font-family:var(--f-display);font-size:36px;font-weight:300;line-height:1.1;font-style:italic}
+.course-sub{font-size:8px;letter-spacing:2px;color:var(--mid);margin-top:6px;text-transform:uppercase}
+.header-deco{position:absolute;right:24px;top:24px;width:44px;height:44px;border:1px solid var(--mid);display:flex;align-items:center;justify-content:center;font-size:20px}
+.nav-wrap{overflow-x:auto;border-bottom:1px solid var(--mid);scrollbar-width:none}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nav{display:flex;min-width:max-content}
+.nav-btn{padding:12px 16px;font-family:var(--f-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:none;border:none;border-right:1px solid var(--mid);cursor:pointer;color:var(--mid);transition:all .2s;position:relative;white-space:nowrap}
+.nav-btn:last-child{border-right:none}
+.nav-btn.active{color:var(--ink);background:var(--light)}
+.nav-btn.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent)}
+.notif-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block;margin-left:4px;vertical-align:middle}
+.page{display:none;padding-bottom:48px}
+.page.active{display:block}
+
+/* 時間線 */
+.timeline-wrap{padding:0 24px;position:relative}
+.tl-axis{position:absolute;left:52px;top:0;bottom:0;width:1px;background:var(--mid)}
+.week-item{position:relative;padding:12px 0;border-bottom:1px solid var(--light)}
+.week-row{display:flex;align-items:center;gap:14px}
+.week-date .mo{font-size:7px;display:block;text-transform:uppercase;color:var(--mid)}
+.week-date .dy{font-family:var(--f-display);font-size:18px;font-style:italic;line-height:1;display:block;color:var(--mid)}
+.week-date{min-width:28px;text-align:center;flex-shrink:0}
+.week-body{flex:1}
+.week-title{font-size:12px;color:var(--ink);line-height:1.4}
+.week-item.is-past .week-title{color:var(--mid)}
+.week-item.is-off .week-title{color:var(--mid);text-decoration:line-through;text-decoration-color:var(--mid)}
+.week-type-tag{display:inline-block;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;margin-top:3px}
+.type-off{border:1px solid var(--mid);color:var(--mid)}
+.type-film{border:1px solid #5a7a9a;color:#5a7a9a}
+.type-lecture{border:1px solid var(--mid);color:var(--mid)}
+.type-online{border:1px solid #7a9a5a;color:#7a9a5a}
+.type-exam{border:1px solid var(--accent);color:var(--accent)}
+.type-report{border:1px solid #9a5a7a;color:#9a5a7a}
+.type-tba{border:1px solid var(--mid);color:var(--mid)}
+.next-badge{display:inline-block;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;background:var(--accent);color:var(--paper);margin-left:6px;vertical-align:middle}
+
+/* 作業 */
+.assign-header{padding:18px 24px 12px;border-bottom:1px solid var(--light)}
+.assign-title-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
+.assign-title-row h3{font-family:var(--f-display);font-size:22px;font-weight:300;font-style:italic}
+.assign-total{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid)}
+.score-bar-wrap{display:flex;gap:2px;height:6px}
+.score-seg{height:6px}
+.score-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--mid)}
+.legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.assign-card{margin:12px 16px;border:1px solid var(--mid);background:var(--paper)}
+.assign-card-top{padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start}
+.assign-card-left{display:flex;align-items:baseline;gap:10px}
+.assign-num{font-family:var(--f-display);font-size:30px;color:var(--light);font-weight:300;font-style:italic;line-height:1}
+.assign-name{font-size:12px;color:var(--ink)}
+.assign-body{padding:0 16px}
+.assign-desc{font-size:10px;color:var(--mid);line-height:1.6}
+.assign-footer{padding:10px 16px;border-top:1px solid var(--light);display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.assign-date{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mid)}
+.assign-pct-bar{height:3px;background:var(--light);margin:0 16px 12px;position:relative}
+.assign-pct-fill{height:3px;position:absolute;left:0;top:0}
+.countdown-body{padding:10px 16px;display:flex;align-items:center;gap:0}
+.countdown-unit{text-align:center;flex:1}
+.countdown-n{font-family:var(--f-display);font-size:32px;font-style:italic;font-weight:300;line-height:1}
+.countdown-l{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-top:2px}
+.countdown-sep{font-family:var(--f-display);font-size:24px;color:var(--mid);padding:0 2px;align-self:flex-start;margin-top:4px}
+.countdown-done{padding:12px 16px;font-size:10px;color:var(--mid);font-style:italic}
+.countdown-spacer{height:12px}
+
+/* 公告欄 */
+.announce-toolbar{padding:12px 24px;border-bottom:1px solid var(--light);display:flex;justify-content:space-between;align-items:center}
+.announce-toolbar h3{font-family:var(--f-display);font-size:22px;font-weight:300;font-style:italic}
+.announce-add-btn{font-family:var(--f-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--ink);background:none;color:var(--ink);cursor:pointer;transition:all .2s}
+.announce-add-btn:hover{background:var(--ink);color:var(--paper)}
+.announce-form{padding:16px 24px;border-bottom:1px solid var(--mid);display:none;flex-direction:column;gap:10px}
+.announce-form.open{display:flex}
+.announce-inp{border:none;border-bottom:1px solid var(--mid);background:none;font-family:var(--f-mono);font-size:11px;padding:6px 0;color:var(--ink);outline:none;width:100%}
+.announce-inp::placeholder{color:var(--mid)}
+.announce-ta{border:none;border-bottom:1px solid var(--mid);background:none;font-family:var(--f-mono);font-size:11px;padding:6px 0;color:var(--ink);outline:none;width:100%;resize:none;height:60px}
+.announce-ta::placeholder{color:var(--mid)}
+.announce-form-btns{display:flex;gap:8px;justify-content:flex-end}
+.announce-submit{font-family:var(--f-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;background:var(--ink);color:var(--paper);border:none;cursor:pointer}
+.announce-cancel{font-family:var(--f-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--mid);background:none;color:var(--mid);cursor:pointer}
+.announce-item{padding:16px 24px;border-bottom:1px solid var(--light);position:relative}
+.announce-item:hover .announce-del{opacity:1}
+.announce-item-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px}
+.announce-pin{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px}
+.announce-item-title{font-size:12px;color:var(--ink);flex:1;line-height:1.4}
+.announce-item-body{font-size:10px;color:var(--mid);line-height:1.7;padding-left:18px}
+.announce-item-date{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);padding-left:18px;margin-top:6px}
+.announce-del{position:absolute;right:20px;top:16px;font-size:11px;color:var(--mid);cursor:pointer;opacity:0;transition:opacity .2s;background:none;border:none;font-family:var(--f-mono)}
+.announce-del:hover{color:var(--accent)}
+.announce-empty{padding:32px 24px;text-align:center;font-size:10px;color:var(--mid);letter-spacing:2px;text-transform:uppercase}
+.announce-new-badge{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;margin-left:6px;vertical-align:middle}
+
+/* 老師 */
+.teacher-hero{padding:32px 24px 24px;border-bottom:1px solid var(--mid);position:relative;overflow:hidden}
+.teacher-deco{position:absolute;right:-16px;bottom:-16px;width:100px;height:100px;border:1px solid var(--mid);transform:rotate(20deg);opacity:.4}
+.teacher-deco2{position:absolute;right:12px;bottom:8px;width:60px;height:60px;border:1px solid var(--mid);transform:rotate(8deg);opacity:.25}
+.teacher-initial{font-family:var(--f-display);font-size:56px;font-weight:300;font-style:italic;color:var(--ink);line-height:1;margin-bottom:6px}
+.teacher-name{font-family:var(--f-display);font-size:28px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.2}
+.teacher-alias{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-top:4px}
+.teacher-role{display:inline-block;font-size:8px;letter-spacing:2px;text-transform:uppercase;border:1px solid var(--accent);color:var(--accent);padding:3px 10px;margin-top:14px}
+.teacher-section{padding:18px 24px;border-bottom:1px solid var(--light)}
+.teacher-section:last-child{border-bottom:none}
+.teacher-section-label{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-bottom:12px}
+.contact-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--light)}
+.contact-row:last-child{border-bottom:none}
+.contact-icon{width:32px;height:32px;border:1px solid var(--mid);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:var(--mid)}
+.contact-body{flex:1}
+.contact-type{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:3px}
+.contact-value{font-size:12px;color:var(--ink)}
+.contact-action{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--accent);cursor:pointer;padding:4px 10px;border:1px solid var(--accent);white-space:nowrap}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px}
+.spec-tag{font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--mid);color:var(--mid)}
+.cert-row{display:flex;align-items:center;gap:12px;padding:12px 0}
+.cert-seal{width:36px;height:36px;border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cert-seal-inner{font-family:var(--f-display);font-size:18px;font-style:italic;color:var(--accent)}
+.cert-body{flex:1}
+.cert-title{font-size:11px;color:var(--ink);margin-bottom:3px}
+.cert-num{font-size:9px;letter-spacing:1px;color:var(--mid)}
+.work-item{padding:12px 0;border-bottom:1px solid var(--light);display:flex;gap:12px;align-items:flex-start}
+.work-item:last-child{border-bottom:none}
+.work-index{font-family:var(--f-display);font-size:20px;font-style:italic;color:var(--light);min-width:20px;line-height:1.2;flex-shrink:0}
+.work-body{flex:1}
+.work-org{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:4px}
+.work-titles{font-size:11px;color:var(--ink);line-height:1.7}
+.work-role{display:inline-block;font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border:1px solid var(--accent);color:var(--accent);margin-top:5px}
+
+/* 點名 */
+.att-mode-bar{padding:12px 24px;border-bottom:1px solid var(--mid);display:flex;justify-content:space-between;align-items:center}
+.att-mode-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid)}
+.att-mode-toggle{display:flex;border:1px solid var(--mid);overflow:hidden}
+.att-mode-btn{padding:5px 14px;font-family:var(--f-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--mid);transition:all .2s}
+.att-mode-btn.active{background:var(--ink);color:var(--paper)}
+.att-panel{display:none}.att-panel.active{display:block}
+.signin-wrap{padding:28px 24px}
+.week-badge-att{display:inline-block;font-size:8px;letter-spacing:3px;text-transform:uppercase;border:1px solid var(--accent);color:var(--accent);padding:4px 12px;margin-bottom:20px}
+.class-row{display:flex;gap:8px;margin-bottom:20px}
+.class-chip{flex:1;padding:9px 6px;font-family:var(--f-mono);font-size:10px;text-align:center;border:1px solid var(--mid);background:none;cursor:pointer;color:var(--mid);transition:all .2s;letter-spacing:1px}
+.class-chip.active{border-color:var(--ink);color:var(--ink);background:var(--light)}
+.f-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:7px}
+.f-input{width:100%;border:none;border-bottom:1px solid var(--mid);background:none;font-family:var(--f-mono);font-size:15px;padding:9px 0;color:var(--ink);outline:none;margin-bottom:20px}
+.f-input::placeholder{color:var(--mid);font-size:12px}
+.submit-btn{width:100%;padding:13px;font-family:var(--f-mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;background:var(--ink);color:var(--paper);border:none;cursor:pointer}
+.feedback{margin-top:14px;padding:11px;text-align:center;font-size:11px;display:none}
+.fb-ok{background:var(--light);color:var(--ink)}.fb-err{background:#f9e8e8;color:var(--accent)}
+.roll-toolbar{padding:10px 24px;border-bottom:1px solid var(--light);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.roll-cls-btn{padding:5px 12px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--mid);background:none;cursor:pointer;color:var(--mid);font-family:var(--f-mono);transition:all .2s}
+.roll-cls-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.week-sel{padding:5px 8px;font-size:9px;font-family:var(--f-mono);border:1px solid var(--mid);background:var(--paper);color:var(--ink);cursor:pointer;margin-left:auto}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--mid);border-bottom:1px solid var(--mid)}
+.stat-c{background:var(--paper);padding:9px 0;text-align:center}
+.stat-n{font-family:var(--f-display);font-size:22px;font-weight:300;font-style:italic;color:var(--ink)}
+.stat-l{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--mid)}
+.quick-row{padding:7px 24px;border-bottom:1px solid var(--light);display:flex;gap:8px}
+.qb{padding:5px 10px;font-size:8px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--mid);background:none;cursor:pointer;color:var(--mid);font-family:var(--f-mono)}
+.qb:hover{background:var(--light)}
+.s-list{overflow-y:auto;max-height:300px}
+.s-row{display:flex;align-items:center;padding:9px 24px;border-bottom:1px solid var(--light);gap:10px;transition:background .15s}
+.s-row:hover{background:var(--light)}
+.s-no{font-size:9px;color:var(--mid);min-width:22px}
+.s-nm{flex:1;font-size:12px;color:var(--ink)}
+.s-sid{font-size:8px;color:var(--mid);min-width:62px;text-align:right}
+.signed-chip{font-size:7px;letter-spacing:1px;color:var(--accent);padding:1px 4px;border:1px solid var(--accent);margin-left:5px}
+.att-btn{width:26px;height:26px;border:1px solid var(--mid);background:none;cursor:pointer;font-size:10px;font-family:var(--f-mono);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.att-btn.present{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.att-btn.absent{background:#f9e8e8;border-color:#c4a0a0;color:var(--accent)}
+.att-subnav{display:flex;border-bottom:1px solid var(--light);background:var(--light)}
+.att-subnav-btn{flex:1;padding:9px 4px;font-family:var(--f-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;background:none;border:none;border-right:1px solid var(--mid);cursor:pointer;color:var(--mid);transition:all .2s;position:relative}
+.att-subnav-btn:last-child{border-right:none}
+.att-subnav-btn.active{color:var(--ink);background:var(--paper)}
+.att-subnav-btn.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent)}
+.att-sub{display:none}.att-sub.active{display:block}
+.roster-tb{padding:10px 24px;border-bottom:1px solid var(--light);display:flex;gap:8px;align-items:center}
+.roster-cls-btn{padding:5px 12px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--mid);background:none;cursor:pointer;color:var(--mid);font-family:var(--f-mono);transition:all .2s}
+.roster-cls-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.roster-count{font-size:9px;letter-spacing:2px;color:var(--mid);margin-left:auto}
+.r-list{max-height:300px;overflow-y:auto}
+.r-row{display:flex;align-items:center;padding:9px 24px;border-bottom:1px solid var(--light);gap:10px}
+.r-idx{font-size:9px;color:var(--mid);min-width:22px}
+.r-nm{flex:1;font-size:12px;color:var(--ink)}
+.r-id{font-size:9px;color:var(--mid);min-width:70px}
+.rep-tb{padding:10px 24px;border-bottom:1px solid var(--light);display:flex;gap:8px;align-items:center}
+.rep-cls-btn{padding:5px 12px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--mid);background:none;cursor:pointer;color:var(--mid);font-family:var(--f-mono);transition:all .2s}
+.rep-cls-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.rep-wrap{padding:12px 16px;overflow-x:auto}
+.rep-table{width:100%;border-collapse:collapse;font-size:10px}
+.rep-table th{padding:5px 6px;border-bottom:1px solid var(--mid);color:var(--mid);font-weight:400;letter-spacing:1px;text-align:center;white-space:nowrap}
+.rep-table th:first-child{text-align:left}
+.rep-table td{padding:5px 6px;border-bottom:1px solid var(--light);text-align:center}
+.rep-table td:first-child{text-align:left;color:var(--ink)}
+.cp{color:var(--ink);font-weight:700}.ca{color:var(--accent)}.cs{color:#5a9a5a;font-size:9px}
+.cpct{font-family:var(--f-display);font-size:13px;font-style:italic}.low{color:var(--accent)}
+.empty-hint{padding:28px 24px;text-align:center;font-size:10px;color:var(--mid);letter-spacing:2px;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="bar"></div>
+<div class="header">
+  <div class="course-tag">NTUA · 戲劇系 · 2026春季</div>
+  <div class="course-title">戲劇與<br>劇場導論</div>
+  <div class="course-sub">Introduction to Drama &amp; Theatre</div>
+  <div class="header-deco">⬡</div>
+</div>
+<div class="nav-wrap">
+  <div class="nav">
+    <button class="nav-btn active" onclick="switchPage('syllabus',this)">大綱</button>
+    <button class="nav-btn" onclick="switchPage('assign',this)">作業</button>
+    <button class="nav-btn" id="nav-announce" onclick="switchPage('announce',this)">公告</button>
+    <button class="nav-btn" onclick="switchPage('teacher',this)">老師</button>
+    <button class="nav-btn" onclick="switchPage('attend',this)">點名</button>
+  </div>
+</div>
+
+<!-- 大綱 -->
+<div id="syllabus" class="page active">
+  <div class="timeline-wrap">
+    <div class="tl-axis"></div>
+    <div id="weeks-list"></div>
+  </div>
+</div>
+
+<!-- 作業 -->
+<div id="assign" class="page">
+  <div class="assign-header">
+    <div class="assign-title-row"><h3>課程評量</h3><div class="assign-total">合計 100%</div></div>
+    <div class="score-bar-wrap" id="score-bar"></div>
+    <div class="score-legend" id="score-legend"></div>
+  </div>
+  <div id="assign-list"></div>
+</div>
+
+<!-- 公告欄 -->
+<div id="announce" class="page">
+  <div class="announce-toolbar">
+    <h3>公告欄</h3>
+    <button class="announce-add-btn" onclick="toggleAnnounceForm()">＋ 新增公告</button>
+  </div>
+  <div class="announce-form" id="announce-form">
+    <input class="announce-inp" id="ann-title" placeholder="公告標題">
+    <textarea class="announce-ta" id="ann-body" placeholder="公告內容（可留空）"></textarea>
+    <div class="announce-form-btns">
+      <button class="announce-cancel" onclick="toggleAnnounceForm()">取消</button>
+      <button class="announce-submit" onclick="addAnnounce()">發布</button>
+    </div>
+  </div>
+  <div id="announce-list"></div>
+</div>
+
+<!-- 老師 -->
+<div id="teacher" class="page">
+  <div class="teacher-hero">
+    <div class="teacher-deco"></div><div class="teacher-deco2"></div>
+    <div class="teacher-initial">林</div>
+    <div class="teacher-name">林一泓</div>
+    <div class="teacher-alias">Robbie · 羅比</div>
+    <div class="teacher-role">授課教師</div>
+  </div>
+  <div class="teacher-section">
+    <div class="teacher-section-label">學歷</div>
+    <div style="display:flex;align-items:flex-start;gap:14px">
+      <div style="width:32px;height:32px;border:1px solid var(--mid);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--f-display);font-size:16px;font-style:italic;color:var(--mid)">藝</div>
+      <div><div style="font-size:12px;color:var(--ink);margin-bottom:3px">國立臺灣藝術大學</div><div style="font-size:10px;color:var(--mid)">戲劇研究所　畢業</div></div>
+    </div>
+  </div>
+  <div class="teacher-section">
+    <div class="teacher-section-label">專長領域</div>
+    <div class="tag-row">
+      <span class="spec-tag">導演</span><span class="spec-tag">編劇</span>
+      <span class="spec-tag">戲劇與劇場理論</span><span class="spec-tag">大眾劇場</span>
+      <span class="spec-tag">戲劇製作</span><span class="spec-tag">排演</span>
+    </div>
+  </div>
+  <div class="teacher-section">
+    <div class="teacher-section-label">創作經歷</div>
+    <div class="work-item"><div class="work-index">1</div><div class="work-body"><div class="work-org">大觀國際表演藝術節</div><div class="work-titles">《P_2095：尋找70年後的AI彼得潘》</div><span class="work-role">導演 · 編劇</span></div></div>
+    <div class="work-item"><div class="work-index">2</div><div class="work-body"><div class="work-org">喜劇特急</div><div class="work-titles">《喜劇見習生》　《喜劇PK賽》</div><span class="work-role">導演 · 編劇</span></div></div>
+    <div class="work-item"><div class="work-index">3</div><div class="work-body"><div class="work-org">大觀國際表演藝術節</div><div class="work-titles">《時光冉冉》三部曲</div><span class="work-role">執行導演</span></div></div>
+    <div class="work-item"><div class="work-index">4</div><div class="work-body"><div class="work-org">路崎門</div><div class="work-titles">《逃出2020》　《男孩快跑》　《最後的作業》　《一、二、三，枕頭人》</div><span class="work-role">導演</span></div></div>
+    <div class="work-item"><div class="work-index">5</div><div class="work-body"><div class="work-org">野火劇團</div><div class="work-titles">《九層之家》　《熱帶魚》</div><span class="work-role">導演</span></div></div>
+    <div class="work-item"><div class="work-index">6</div><div class="work-body"><div class="work-org">復興少年劇團</div><div class="work-titles">《夢幻島》　《快樂王子》　《給下一個小王子》　《銀河鐵道列車》</div><span class="work-role">導演</span></div></div>
+    <div class="work-item"><div class="work-index">7</div><div class="work-body"><div class="work-org">第九屆台北藝穗節</div><div class="work-titles">《杏仁豆腐心》</div><span class="work-role">導演</span></div></div>
+  </div>
+  <div class="teacher-section">
+    <div class="teacher-section-label">教師證書</div>
+    <div class="cert-row">
+      <div class="cert-seal"><div class="cert-seal-inner">證</div></div>
+      <div class="cert-body"><div class="cert-title">高級中等以下學校及幼兒園教師證書</div><div class="cert-num">講字　第 150464 號</div></div>
+    </div>
+  </div>
+  <div class="teacher-section">
+    <div class="teacher-section-label">聯絡方式</div>
+    <div class="contact-row">
+      <div class="contact-icon">@</div>
+      <div class="contact-body"><div class="contact-type">Email</div><div class="contact-value">107067@art365.ntua.edu.tw</div></div>
+      <div class="contact-action" onclick="window.location='mailto:107067@art365.ntua.edu.tw'">寄信</div>
+    </div>
+    <div class="contact-row">
+      <div class="contact-icon" style="font-size:10px;letter-spacing:-1px">IG</div>
+      <div class="contact-body"><div class="contact-type">Instagram</div><div class="contact-value">@robbiedrama</div></div>
+      <div class="contact-action" onclick="window.open('https://www.instagram.com/robbiedrama','_blank')">前往</div>
+    </div>
+  </div>
+</div>
+
+<!-- 點名 -->
+<div id="attend" class="page">
+  <div class="att-mode-bar">
+    <div class="att-mode-label">身份切換</div>
+    <div class="att-mode-toggle">
+      <button class="att-mode-btn active" id="amb-teacher" onclick="setAttMode('teacher')">老師</button>
+      <button class="att-mode-btn" id="amb-student" onclick="setAttMode('student')">學生</button>
+    </div>
+  </div>
+  <div class="att-panel active" id="att-student">
+    <div class="signin-wrap">
+      <div class="week-badge-att" id="att-week-badge">載入中...</div>
+      <div class="f-label">選擇班級</div>
+      <div class="class-row">
+        <button class="class-chip active" onclick="selectSClass('日戲一',this)">日戲一</button>
+        <button class="class-chip" onclick="selectSClass('進戲一',this)">進戲一</button>
+      </div>
+      <div class="f-label">學號</div>
+      <input class="f-input" id="s-sid" placeholder="輸入學號">
+      <div class="f-label">姓名</div>
+      <input class="f-input" id="s-name" placeholder="輸入姓名">
+      <button class="submit-btn" onclick="doSignIn()">簽　到</button>
+      <div class="feedback" id="s-fb"></div>
+    </div>
+  </div>
+  <div class="att-panel" id="att-teacher">
+    <div class="att-subnav">
+      <button class="att-subnav-btn active" onclick="switchAttSub('roll',this)">點名</button>
+      <button class="att-subnav-btn" onclick="switchAttSub('roster',this)">名單</button>
+      <button class="att-subnav-btn" onclick="switchAttSub('report',this)">報表</button>
+    </div>
+    <div class="att-sub active" id="att-roll">
+      <div class="roll-toolbar">
+        <button class="roll-cls-btn active" id="rc-a" onclick="switchRollCls('日戲一',this)">日戲一</button>
+        <button class="roll-cls-btn" id="rc-b" onclick="switchRollCls('進戲一',this)">進戲一</button>
+        <select class="week-sel" id="roll-week-sel" onchange="renderRoll()"></select>
+      </div>
+      <div class="stats-row">
+        <div class="stat-c"><div class="stat-n" id="st-p">0</div><div class="stat-l">出席</div></div>
+        <div class="stat-c"><div class="stat-n" id="st-a">0</div><div class="stat-l">缺席</div></div>
+        <div class="stat-c"><div class="stat-n" id="st-s">0</div><div class="stat-l">自簽</div></div>
+      </div>
+      <div class="quick-row">
+        <button class="qb" onclick="markAll('present')">全部出席</button>
+        <button class="qb" onclick="markAll('absent')">全部缺席</button>
+        <button class="qb" onclick="markAll(null)">清除本週</button>
+      </div>
+      <div class="s-list" id="roll-list"></div>
+    </div>
+    <div class="att-sub" id="att-roster">
+      <div class="roster-tb">
+        <button class="roster-cls-btn active" id="rsc-a" onclick="switchRosterCls('日戲一',this)">日戲一</button>
+        <button class="roster-cls-btn" id="rsc-b" onclick="switchRosterCls('進戲一',this)">進戲一</button>
+        <div class="roster-count" id="roster-count"></div>
+      </div>
+      <div class="r-list" id="roster-list"></div>
+    </div>
+    <div class="att-sub" id="att-report">
+      <div class="rep-tb">
+        <button class="rep-cls-btn active" id="repc-a" onclick="switchRepCls('日戲一',this)">日戲一</button>
+        <button class="rep-cls-btn" id="repc-b" onclick="switchRepCls('進戲一',this)">進戲一</button>
+      </div>
+      <div class="rep-wrap" id="report-content"></div>
+    </div>
+  </div>
+</div>
+<div class="bar"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+const schedule=[
+  {date:'2/26',mo:'Feb',dy:'26',title:'停課',type:'off'},
+  {date:'3/5',mo:'Mar',dy:'5',title:'影片《亂民全講》',type:'film'},
+  {date:'3/12',mo:'Mar',dy:'12',title:'Ch5 導演劇場',type:'lecture'},
+  {date:'3/19',mo:'Mar',dy:'19',title:'Ch6 前衛劇場',type:'lecture'},
+  {date:'3/26',mo:'Mar',dy:'26',title:'Ch7 荒謬與殘酷劇場',type:'lecture'},
+  {date:'4/2',mo:'Apr',dy:'2',title:'線上學習 · 影片《仲夏夜之夢》',type:'online'},
+  {date:'4/9',mo:'Apr',dy:'9',title:'期中考試',type:'exam'},
+  {date:'4/16',mo:'Apr',dy:'16',title:'分組報告',type:'report'},
+  {date:'4/23',mo:'Apr',dy:'23',title:'分組報告回饋 · Ch8 政治劇場',type:'lecture'},
+  {date:'4/30',mo:'Apr',dy:'30',title:'仲夏夜之夢',type:'lecture'},
+  {date:'5/7',mo:'May',dy:'7',title:'影片《海鷗》',type:'film'},
+  {date:'5/14',mo:'May',dy:'14',title:'影片《Closer》',type:'film'},
+  {date:'5/21',mo:'May',dy:'21',title:'暗戀桃花源 · 影片《初步舉證》',type:'film'},
+  {date:'5/28',mo:'May',dy:'28',title:'Ch10 文化交流劇場',type:'lecture'},
+  {date:'6/4',mo:'Jun',dy:'4',title:'觀戲報告',type:'report'},
+  {date:'6/11',mo:'Jun',dy:'11',title:'期末個人報告',type:'report'},
+  {date:'6/18',mo:'Jun',dy:'18',title:'期末個人報告',type:'report'},
+  {date:'6/25',mo:'Jun',dy:'25',title:'TBA',type:'tba'},
+];
+const typeLabel={off:'停課',film:'影片',lecture:'講授',online:'線上',exam:'考試',report:'報告',tba:'待定'};
+function parseDate(s){const[m,d]=s.split('/').map(Number);return new Date(2026,m-1,d)}
+const today=new Date();
+const todayMidnight=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+
+const assignments=[
+  {n:'01',title:'期中考試',desc:'範圍涵蓋Ch1–Ch7，閉卷筆試。',date:'4/9',deadline:new Date(2026,3,9),pct:25,color:'#8b2020'},
+  {n:'02',title:'期中分組報告',desc:'分組進行劇場主題研究報告，4/16及4/23課堂發表。',date:'4/16–4/23',deadline:new Date(2026,3,16),pct:25,color:'#5a4a8a'},
+  {n:'03',title:'期末個人報告',desc:'個人研究報告，6/11及6/18課堂發表。',date:'6/11–6/18',deadline:new Date(2026,5,11),pct:25,color:'#2a6a5a'},
+  {n:'04',title:'觀劇報告',desc:'觀賞一場現場演出，提交觀後報告，6/4課堂報告。',date:'6/4',deadline:new Date(2026,5,4),pct:10,color:'#5a7a2a'},
+  {n:'05',title:'上課參與',desc:'出席率、課堂討論與互動表現。',date:'學期持續',deadline:new Date(2026,5,25),pct:15,color:'#7a5a2a'},
+];
+
+const ROSTER_DATA={
+  '日戲一':[
+    {name:'郭承澤',sid:'11111119'},{name:'巫宥蓁',sid:'11111151'},{name:'徐翊娟',sid:'11226810'},
+    {name:'徐均宥',sid:'11411101'},{name:'戚可楓',sid:'11411102'},{name:'吳錦裕',sid:'11411103'},
+    {name:'郭濬銜',sid:'11411104'},{name:'連光皓',sid:'11411105'},{name:'陳力維',sid:'11411106'},
+    {name:'鍾承芯',sid:'11411107'},{name:'王少辰',sid:'11411108'},{name:'李嘉珍',sid:'11411109'},
+    {name:'李曉芊',sid:'11411110'},{name:'葉宥均',sid:'11411111'},{name:'李昶毅',sid:'11411112'},
+    {name:'謝予梣',sid:'11411113'},{name:'蘇珮文',sid:'11411114'},{name:'張馨云',sid:'11411115'},
+    {name:'李啟瑞',sid:'11411116'},{name:'尹中釩',sid:'11411117'},{name:'盧思縈',sid:'11411118'},
+    {name:'蘇哲永',sid:'11411119'},{name:'張家維',sid:'11411120'},{name:'李芝蓉',sid:'11411121'},
+    {name:'翁梓桐',sid:'11411124'},{name:'秦康傑',sid:'11411126'},{name:'山根真實',sid:'11411128'},
+    {name:'安海媛',sid:'11411129'},{name:'洪帷恩',sid:'11411130'},{name:'連奕愷',sid:'11411131'},
+    {name:'李泓毅',sid:'11411132'},{name:'徐楚為',sid:'11411133'},{name:'董宥廷',sid:'11411134'},
+    {name:'陳品勳',sid:'11411135'},{name:'嚴品鈞',sid:'11411136'},{name:'劉哲維',sid:'11411137'},
+    {name:'李宥德',sid:'11411138'},{name:'楊詠淋',sid:'11411139'},{name:'陳曦',sid:'11411140'},
+    {name:'李睿昕',sid:'11411141'},{name:'蕭詠晴',sid:'11411142'},{name:'廖喆禹',sid:'11411143'},
+    {name:'洪睿翎',sid:'11411144'},{name:'卓郁芯',sid:'11411145'},{name:'王婷婷',sid:'11411146'}
+  ],
+  '進戲一':[
+    {name:'游芝蕙',sid:'11151102'},{name:'陳宣凱',sid:'11151116'},{name:'李璿',sid:'11251101'},
+    {name:'黃雅榆',sid:'11251145'},{name:'游邦弘',sid:'11251148'},{name:'黃家芸',sid:'11351116'},
+    {name:'尹筑帆',sid:'11351139'},{name:'黃晏柅',sid:'11351146'},{name:'孫宜安',sid:'11351147'},
+    {name:'許紹祺',sid:'11451101'},{name:'張赫',sid:'11451102'},{name:'謝唯澤',sid:'11451103'},
+    {name:'廖柏源',sid:'11451104'},{name:'林晉愷',sid:'11451105'},{name:'張名杰',sid:'11451106'},
+    {name:'楊璽曄',sid:'11451107'},{name:'粘仕杰',sid:'11451108'},{name:'林勵餚',sid:'11451109'},
+    {name:'石承均',sid:'11451110'},{name:'楊晏婕',sid:'11411111'},{name:'周亭安',sid:'11451112'},
+    {name:'靳詠婷',sid:'11451113'},{name:'賴冠蓉',sid:'11451114'},{name:'張尹瑄',sid:'11451115'},
+    {name:'張淨涵',sid:'11451116'},{name:'黃心宥',sid:'11451117'},{name:'葉靖純',sid:'11451118'},
+    {name:'王薏雯',sid:'11451119'},{name:'鄭景謙',sid:'11451120'},{name:'黎晉',sid:'11451121'},
+    {name:'望清鋐',sid:'11451122'},{name:'許志嘉',sid:'11451124'},{name:'朱宥蓁',sid:'11451125'},
+    {name:'簡熏誼',sid:'11451126'},{name:'江宸儀',sid:'11451127'},{name:'余曉姸',sid:'11451128'},
+    {name:'林昕霓',sid:'11451129'},{name:'鄭雅慧',sid:'11451130'},{name:'馮姿穎',sid:'11451131'},
+    {name:'陳羿嫙',sid:'11451132'},{name:'陳宥安',sid:'11451133'},{name:'張子儀',sid:'11451134'},
+    {name:'廖芷萱',sid:'11451135'},{name:'彭儀緁',sid:'11451136'},{name:'李妍蓁',sid:'11451137'},
+    {name:'許佳心',sid:'11451138'},{name:'蔡翔丞',sid:'11451139'},{name:'陳慧芠',sid:'11451141'},
+    {name:'沈佳穎',sid:'11451142'},{name:'吳敏郁',sid:'11451144'}
+  ]
+};
+
+const attendWeeks=schedule.filter(s=>s.type!=='off').map(s=>s.date);
+let rollClass='日戲一',rosterClass='日戲一',repClass='日戲一',signinClass='日戲一';
+
+function getCurrentClassDate(){
+  const active=schedule.filter(s=>s.type!=='off');
+  for(let i=active.length-1;i>=0;i--){if(parseDate(active[i].date)<=todayMidnight)return active[i].date;}
+  return active[0].date;
+}
+let rollWeek=getCurrentClassDate();
+
+// ── Firebase 設定（請至 Firebase console 填入您的設定值）──
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBQ8JozgbaqdgTQW_Ej7oVrpnfXmjojH38",
+  authDomain: "robbieclass-8c3aa.firebaseapp.com",
+  projectId: "robbieclass-8c3aa",
+  storageBucket: "robbieclass-8c3aa.firebasestorage.app",
+  messagingSenderId: "448018701175",
+  appId: "1:448018701175:web:6cf0be25b91bbbbaf31f72"
+};
+firebase.initializeApp(FIREBASE_CONFIG);
+const db = firebase.firestore();
+// 記憶體快取，由 Firestore onSnapshot 即時更新
+let _attCache = {};
+let _annCache = [];
+function getRosters(){return JSON.parse(JSON.stringify(ROSTER_DATA))}
+function getAtt(){return JSON.parse(JSON.stringify(_attCache))}
+function saveAtt(a){_attCache=a;db.collection('drama').doc('att').set({data:a})}
+function getRec(cls,w,sid){const a=getAtt();return(a[cls]&&a[cls][w]&&a[cls][w][sid])||null}
+function setRec(cls,w,sid,val){
+  const a=getAtt();if(!a[cls])a[cls]={};if(!a[cls][w])a[cls][w]={};
+  if(val===null)delete a[cls][w][sid];else a[cls][w][sid]=val;saveAtt(a);
+}
+
+function switchPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');btn.classList.add('active');
+  if(id==='attend'){renderRoll();renderRoster();}
+  if(id==='announce'){markAnnouncesRead();}
+}
+
+function renderWeeks(){
+  const nextClass=schedule.find(s=>s.type!=='off'&&parseDate(s.date)>todayMidnight);
+  const mm=today.getMonth()+1;const dd=today.getDate();const todayStr=`${mm}/${dd}`;
+  const moNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const todayLabel=`${moNames[today.getMonth()]} ${dd} · 今天`;
+  const firstFutureIdx=schedule.findIndex(s=>parseDate(s.date)>todayMidnight);
+  let html='';let todayInserted=false;
+  schedule.forEach((w,idx)=>{
+    const dt=parseDate(w.date);const isPast=dt<todayMidnight;
+    const isToday=w.date===todayStr;const isNext=nextClass&&w.date===nextClass.date;
+    if(!todayInserted&&idx===firstFutureIdx){
+      html+=`<div style="padding:10px 0 6px;display:flex;align-items:center">
+        <div style="width:28px;flex-shrink:0"></div>
+        <div style="width:8px;height:1px;background:var(--accent);flex-shrink:0"></div>
+        <div style="flex:1;height:1px;background:var(--accent)"></div>
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0"></div>
+        <span style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);padding:2px 8px;border:1px solid var(--accent);margin-left:8px;white-space:nowrap">${todayLabel}</span>
+      </div>`;
+      todayInserted=true;
+    }
+    html+=`<div class="week-item${isPast||isToday?' is-past':''}${w.type==='off'?' is-off':''}">
+      <div class="week-row">
+        <div class="week-date"><span class="mo">${w.mo}</span><span class="dy">${w.dy}</span></div>
+        <div style="width:${isNext?'10px':'8px'};height:${isNext?'10px':'8px'};border-radius:50%;background:${isNext?'var(--accent)':isPast||isToday?'var(--ink)':'var(--mid)'};border:1px solid ${isNext?'var(--accent)':isPast||isToday?'var(--ink)':'var(--mid)'};flex-shrink:0;z-index:1"></div>
+        <div class="week-body">
+          <div class="week-title">${w.title}${isNext?'<span class="next-badge">下一堂</span>':''}</div>
+          <span class="week-type-tag type-${w.type}">${typeLabel[w.type]}</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  if(!todayInserted){
+    html+=`<div style="padding:10px 0 6px;display:flex;align-items:center">
+      <div style="width:28px;flex-shrink:0"></div>
+      <div style="flex:1;height:1px;background:var(--accent)"></div>
+      <div style="width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0"></div>
+      <span style="font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);padding:2px 8px;border:1px solid var(--accent);margin-left:8px;white-space:nowrap">${todayLabel}</span>
+    </div>`;
+  }
+  document.getElementById('weeks-list').innerHTML=html;
+}
+
+function daysUntil(d){return Math.ceil((d-todayMidnight)/(1000*60*60*24))}
+
+function renderCountdown(a){
+  const days=daysUntil(a.deadline);
+  if(days<0)return`<div class="countdown-done">已截止</div>`;
+  if(days===0)return`<div class="countdown-body"><div class="countdown-unit"><div class="countdown-n" style="color:var(--accent)">今天</div><div class="countdown-l">截止</div></div></div>`;
+  if(days<=14)return`<div class="countdown-body"><div class="countdown-unit"><div class="countdown-n" style="color:${days<=7?'var(--accent)':a.color}">${days}</div><div class="countdown-l">天後截止</div></div></div>`;
+  const wks=Math.floor(days/7),rem=days%7;
+  return`<div class="countdown-body">
+    <div class="countdown-unit"><div class="countdown-n" style="color:${a.color}">${wks}</div><div class="countdown-l">週</div></div>
+    <div class="countdown-sep">·</div>
+    <div class="countdown-unit"><div class="countdown-n" style="color:${a.color}">${rem}</div><div class="countdown-l">天</div></div>
+    <div style="flex:2;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mid);align-self:center;padding-left:8px">後截止</div>
+  </div>`;
+}
+
+function renderAssign(){
+  document.getElementById('score-bar').innerHTML=assignments.map(a=>`<div class="score-seg" style="width:${a.pct}%;background:${a.color}"></div>`).join('');
+  document.getElementById('score-legend').innerHTML=assignments.map(a=>`<div class="legend-item"><div class="legend-dot" style="background:${a.color}"></div>${a.title} ${a.pct}%</div>`).join('');
+  let html='<div class="countdown-spacer"></div>';
+  assignments.forEach(a=>{
+    const done=daysUntil(a.deadline)<0;
+    html+=`<div class="assign-card" style="${done?'opacity:.5':''}">
+      <div class="assign-card-top">
+        <div class="assign-card-left"><div class="assign-num">${a.n}</div><div class="assign-name">${a.title}</div></div>
+        <div style="display:flex;align-items:baseline;gap:3px">
+          <span style="font-family:var(--f-display);font-size:28px;font-style:italic;color:${a.color};line-height:1">${a.pct}</span>
+          <span style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mid)">%</span>
+        </div>
+      </div>
+      <div class="assign-pct-bar"><div class="assign-pct-fill" style="width:${a.pct}%;background:${a.color}"></div></div>
+      <div style="margin:0 16px;border-left:3px solid ${a.color};background:var(--light)">${renderCountdown(a)}</div>
+      <div class="assign-body" style="margin-top:10px"><div class="assign-desc">${a.desc}</div></div>
+      <div class="assign-footer"><div class="assign-date">${a.date}</div></div>
+    </div><div class="countdown-spacer"></div>`;
+  });
+  document.getElementById('assign-list').innerHTML=html;
+}
+
+function getAnnounces(){return JSON.parse(JSON.stringify(_annCache))}
+function saveAnnounces(a){_annCache=a;db.collection('drama').doc('announces').set({list:a})}
+function getLastRead(){try{const v=localStorage.getItem('drama_ann_last_read');return v?JSON.parse(v):0}catch(e){return 0}}
+function saveLastRead(){try{localStorage.setItem('drama_ann_last_read',JSON.stringify(Date.now()))}catch(e){}}
+function hasUnread(){const ann=getAnnounces();const last=getLastRead();return ann.some(a=>a.ts>last)}
+function updateNavDot(){
+  const btn=document.getElementById('nav-announce');
+  const ex=btn.querySelector('.notif-dot');
+  if(hasUnread()&&!ex){const d=document.createElement('span');d.className='notif-dot';btn.appendChild(d);}
+  else if(!hasUnread()&&ex){ex.remove();}
+}
+function markAnnouncesRead(){saveLastRead();updateNavDot();}
+function toggleAnnounceForm(){
+  const f=document.getElementById('announce-form');
+  f.classList.toggle('open');
+  if(f.classList.contains('open'))document.getElementById('ann-title').focus();
+}
+function addAnnounce(){
+  const title=document.getElementById('ann-title').value.trim();
+  const body=document.getElementById('ann-body').value.trim();
+  if(!title){alert('請輸入公告標題');return}
+  const ann=getAnnounces();
+  ann.unshift({id:Date.now(),title,body,ts:Date.now()});
+  saveAnnounces(ann);
+  document.getElementById('ann-title').value='';
+  document.getElementById('ann-body').value='';
+  toggleAnnounceForm();
+  renderAnnounces();
+  updateNavDot();
+}
+function deleteAnnounce(id){
+  if(!confirm('確認刪除此公告？'))return;
+  saveAnnounces(getAnnounces().filter(a=>a.id!==id));
+  renderAnnounces();updateNavDot();
+}
+function renderAnnounces(){
+  const ann=getAnnounces();const last=getLastRead();
+  if(!ann.length){document.getElementById('announce-list').innerHTML=`<div class="announce-empty">目前沒有公告</div>`;return}
+  const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('announce-list').innerHTML=ann.map(a=>{
+    const d=new Date(a.ts);
+    const dateStr=`${d.getFullYear()}/${months[d.getMonth()]}${d.getDate()}日`;
+    const isNew=a.ts>last;
+    return`<div class="announce-item">
+      <button class="announce-del" onclick="deleteAnnounce(${a.id})">×</button>
+      <div class="announce-item-top">
+        <div class="announce-pin" style="${isNew?'':'background:var(--mid)'}"></div>
+        <div class="announce-item-title">${a.title}${isNew?'<span class="announce-new-badge"></span>':''}</div>
+      </div>
+      ${a.body?`<div class="announce-item-body">${a.body.replace(/\n/g,'<br>')}</div>`:''}
+      <div class="announce-item-date">${dateStr}</div>
+    </div>`;
+  }).join('');
+}
+
+function setAttMode(m){
+  document.getElementById('amb-teacher').classList.toggle('active',m==='teacher');
+  document.getElementById('amb-student').classList.toggle('active',m==='student');
+  document.getElementById('att-teacher').classList.toggle('active',m==='teacher');
+  document.getElementById('att-student').classList.toggle('active',m==='student');
+}
+function switchAttSub(id,btn){
+  document.querySelectorAll('.att-sub').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.att-subnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('att-'+id).classList.add('active');btn.classList.add('active');
+  if(id==='roster')renderRoster();if(id==='report')renderReport();if(id==='roll')renderRoll();
+}
+function selectSClass(cls,btn){
+  signinClass=cls;document.querySelectorAll('.class-chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+}
+function updateAttBadge(){
+  const cur=getCurrentClassDate();const s=schedule.find(x=>x.date===cur);
+  document.getElementById('att-week-badge').textContent=s?`${s.mo} ${s.dy} · ${s.title}`:'點名開放中';
+}
+function doSignIn(){
+  const sid=document.getElementById('s-sid').value.trim();
+  const name=document.getElementById('s-name').value.trim();
+  if(!sid||!name){showFb('請填寫學號與姓名','err');return}
+  const week=getCurrentClassDate();
+  const found=(getRosters()[signinClass]||[]).find(s=>s.sid===sid&&s.name===name);
+  if(!found){showFb('查無此學生，請確認班級、學號與姓名','err');return}
+  const ex=getRec(signinClass,week,found.sid);
+  if(ex==='present'||ex==='signed'){showFb(`${found.name} 已完成簽到 ✓`,'ok');return}
+  setRec(signinClass,week,found.sid,'signed');
+  showFb(`${found.name} 簽到成功！`,'ok');
+  document.getElementById('s-sid').value='';document.getElementById('s-name').value='';
+  if(rollWeek===week&&rollClass===signinClass)renderRoll();
+}
+function showFb(msg,type){
+  const fb=document.getElementById('s-fb');
+  fb.textContent=msg;fb.className='feedback '+(type==='ok'?'fb-ok':'fb-err');
+  fb.style.display='block';setTimeout(()=>{fb.style.display='none'},3000);
+}
+function buildWeekSel(){
+  document.getElementById('roll-week-sel').innerHTML=attendWeeks.map(w=>{
+    const s=schedule.find(x=>x.date===w);
+    return`<option value="${w}"${w===rollWeek?' selected':''}>${w} ${s?s.title.slice(0,8):''}</option>`;
+  }).join('');
+}
+function switchRollCls(cls,btn){
+  rollClass=cls;document.querySelectorAll('.roll-cls-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderRoll();
+}
+function markAll(val){(getRosters()[rollClass]||[]).forEach(s=>setRec(rollClass,rollWeek,s.sid,val));renderRoll();}
+function renderRoll(){
+  rollWeek=document.getElementById('roll-week-sel').value;
+  const students=getRosters()[rollClass]||[];
+  let att=0,abs=0,sig=0,html='';
+  students.forEach((s,i)=>{
+    const rec=getRec(rollClass,rollWeek,s.sid);
+    const isP=rec==='present',isA=rec==='absent',isS=rec==='signed';
+    if(isP||isS)att++;if(isA)abs++;if(isS)sig++;
+    html+=`<div class="s-row">
+      <div class="s-no">${String(i+1).padStart(2,'0')}</div>
+      <div class="s-nm">${s.name}${isS?'<span class="signed-chip">自簽</span>':''}</div>
+      <div class="s-sid">${s.sid}</div>
+      <button class="att-btn${isP||isS?' present':isA?' absent':''}" onclick="cycleAtt('${s.sid}')">
+        ${isP||isS?'●':isA?'✕':'○'}
+      </button></div>`;
+  });
+  document.getElementById('roll-list').innerHTML=html||`<div class="empty-hint">尚無學生名單</div>`;
+  document.getElementById('st-p').textContent=att;
+  document.getElementById('st-a').textContent=abs;
+  document.getElementById('st-s').textContent=sig;
+}
+function cycleAtt(sid){
+  const cur=getRec(rollClass,rollWeek,sid);
+  setRec(rollClass,rollWeek,sid,(!cur||cur==='absent')?'present':'absent');renderRoll();
+}
+function switchRosterCls(cls,btn){
+  rosterClass=cls;document.querySelectorAll('.roster-cls-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderRoster();
+}
+function renderRoster(){
+  const list=getRosters()[rosterClass]||[];
+  document.getElementById('roster-count').textContent=`共 ${list.length} 人`;
+  document.getElementById('roster-list').innerHTML=list.map((s,i)=>`
+    <div class="r-row">
+      <div class="r-idx">${String(i+1).padStart(2,'0')}</div>
+      <div class="r-nm">${s.name}</div>
+      <div class="r-id">${s.sid}</div>
+    </div>`).join('');
+}
+function switchRepCls(cls,btn){
+  repClass=cls;document.querySelectorAll('.rep-cls-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderReport();
+}
+function renderReport(){
+  const students=getRosters()[repClass]||[];
+  const clsA=(getAtt()[repClass])||{};
+  const usedWeeks=attendWeeks.filter(w=>clsA[w]&&Object.keys(clsA[w]).length>0);
+  if(!usedWeeks.length){document.getElementById('report-content').innerHTML=`<div class="empty-hint">尚無點名紀錄</div>`;return}
+  let html=`<table class="rep-table"><thead><tr><th>姓名</th>${usedWeeks.map(w=>`<th>${w}</th>`).join('')}<th>出席率</th></tr></thead><tbody>`;
+  students.forEach(s=>{
+    let cnt=0;
+    const cells=usedWeeks.map(w=>{
+      const rec=clsA[w]&&clsA[w][s.sid];
+      if(rec==='present'){cnt++;return`<td class="cp">●</td>`}
+      if(rec==='signed'){cnt++;return`<td class="cs">自</td>`}
+      if(rec==='absent')return`<td class="ca">✕</td>`;
+      return`<td style="color:var(--mid)">—</td>`;
+    }).join('');
+    const pct=Math.round(cnt/usedWeeks.length*100);
+    html+=`<tr><td>${s.name}</td>${cells}<td><span class="cpct${pct<75?' low':''}">${pct}%</span></td></tr>`;
+  });
+  html+=`</tbody></table>`;
+  document.getElementById('report-content').innerHTML=html;
+}
+
+// ── 初始化：等 Firestore 兩份資料都載入後才渲染 ──
+let _attLoaded=false,_annLoaded=false;
+
+const _overlay=document.createElement('div');
+_overlay.style.cssText='position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:var(--f-mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--mid)';
+_overlay.textContent='connecting…';
+document.body.appendChild(_overlay);
+
+function _tryInit(){
+  if(!_attLoaded||!_annLoaded)return;
+  _overlay.remove();
+  renderWeeks();renderAssign();renderAnnounces();updateNavDot();
+  buildWeekSel();renderRoll();renderRoster();updateAttBadge();
+}
+
+// 監聽點名資料（跨裝置即時同步）
+db.collection('drama').doc('att').onSnapshot(snap=>{
+  _attCache=snap.exists?(snap.data().data||{}):{};
+  if(!_attLoaded){_attLoaded=true;_tryInit();}
+  else{renderRoll();renderReport();}
+},err=>{console.error('att snapshot error',err);if(!_attLoaded){_attLoaded=true;_tryInit();}});
+
+// 監聽公告資料（跨裝置即時同步）
+db.collection('drama').doc('announces').onSnapshot(snap=>{
+  _annCache=snap.exists?(snap.data().list||[]):[];
+  if(!_annLoaded){_annLoaded=true;_tryInit();}
+  else{renderAnnounces();updateNavDot();}
+},err=>{console.error('ann snapshot error',err);if(!_annLoaded){_annLoaded=true;_tryInit();}});
+</script>
+</body>
+</html>

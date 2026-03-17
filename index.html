@@ -192,6 +192,7 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
 .s-nm{flex:1;font-size:13px;font-weight:700;color:var(--ink)}
 .s-sid{font-size:9px;font-family:var(--f-mono);color:var(--mid);min-width:62px;text-align:right}
 .signed-chip{font-size:8px;font-weight:800;color:var(--orange);padding:2px 6px;background:rgba(245,158,11,.12);border-radius:10px;margin-left:5px}
+.rec-time{font-size:9px;font-family:var(--f-mono);color:var(--mid);margin-left:6px;font-weight:400}
 .att-btn{width:36px;height:36px;border:1px solid var(--light);background:var(--card);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;border-radius:2px;touch-action:manipulation}
 .att-btn.present{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .att-btn.absent{background:#f5ebe8;border-color:#e8c4bc;color:#8b3a2a}
@@ -558,11 +559,13 @@ let _annCache = [];
 function getRosters(){return JSON.parse(JSON.stringify(ROSTER_DATA))}
 function getAtt(){return JSON.parse(JSON.stringify(_attCache))}
 function saveAtt(a){_attCache=a;db.collection('drama').doc('att').set({data:a})}
-function getRec(cls,w,sid){const a=getAtt();return(a[cls]&&a[cls][w]&&a[cls][w][sid])||null}
+function getRec(cls,w,sid){const a=getAtt();const v=(a[cls]&&a[cls][w]&&a[cls][w][sid])||null;return v?(typeof v==='object'?v.v:v):null}
+function getRecTs(cls,w,sid){const a=getAtt();const v=(a[cls]&&a[cls][w]&&a[cls][w][sid])||null;return(v&&typeof v==='object')?v.ts:null}
 function setRec(cls,w,sid,val){
   const a=getAtt();if(!a[cls])a[cls]={};if(!a[cls][w])a[cls][w]={};
-  if(val===null)delete a[cls][w][sid];else a[cls][w][sid]=val;saveAtt(a);
+  if(val===null)delete a[cls][w][sid];else a[cls][w][sid]={v:val,ts:Date.now()};saveAtt(a);
 }
+function fmtTs(ts){if(!ts)return'';const d=new Date(ts);return`${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
 
 function switchPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -832,9 +835,11 @@ function renderRoll(){
     const rec=getRec(rollClass,rollWeek,s.sid);
     const isP=rec==='present',isA=rec==='absent',isS=rec==='signed';
     if(isP||isS)att++;if(isA)abs++;if(isS)sig++;
+    const ts=getRecTs(rollClass,rollWeek,s.sid);
+    const timeStr=ts?`<span class="rec-time">${fmtTs(ts)}</span>`:'';
     html+=`<div class="s-row">
       <div class="s-no">${String(i+1).padStart(2,'0')}</div>
-      <div class="s-nm">${s.name}${isS?'<span class="signed-chip">自簽</span>':''}</div>
+      <div class="s-nm">${s.name}${isS?'<span class="signed-chip">自簽</span>':''}${timeStr}</div>
       <div class="s-sid">${s.sid}</div>
       <button class="att-btn${isP||isS?' present':isA?' absent':''}" onclick="cycleAtt('${s.sid}')">
         ${isP||isS?'●':isA?'✕':'○'}

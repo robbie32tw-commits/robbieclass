@@ -220,6 +220,26 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
 .cp{color:var(--ink);font-weight:800}.ca{color:#dc2626}.cs{color:#16a34a;font-size:9px;font-weight:700}
 .cpct{font-size:13px;font-weight:900}.low{color:#dc2626}
 .empty-hint{padding:40px 24px;text-align:center;font-size:13px;font-weight:700;color:var(--mid)}
+/* ── 防代點：簽到控制 ── */
+.session-ctrl{padding:14px 16px;background:var(--card);border-bottom:1px solid var(--light)}
+.session-open-btn{width:100%;padding:13px;font-size:13px;font-weight:700;background:#16a34a;color:#fff;border:none;cursor:pointer;border-radius:4px;letter-spacing:2px;touch-action:manipulation}
+.session-close-btn{width:100%;padding:13px;font-size:13px;font-weight:700;background:#dc2626;color:#fff;border:none;cursor:pointer;border-radius:4px;letter-spacing:2px;margin-top:10px;touch-action:manipulation}
+.session-code-box{text-align:center;padding:12px 0 6px}
+.session-code-label{font-size:9px;font-weight:700;color:var(--mid);letter-spacing:3px;text-transform:uppercase}
+.session-code-display{font-family:var(--f-mono);font-size:52px;font-weight:700;letter-spacing:14px;color:var(--ink);margin:4px 0 2px}
+.session-code-sub{font-size:11px;color:var(--mid)}
+.gps-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--light);margin-bottom:12px}
+.gps-row-label{font-size:12px;color:var(--ink);flex:1}
+.sw{position:relative;width:42px;height:24px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0}
+.sw-slider{position:absolute;inset:0;background:var(--light);border-radius:24px;cursor:pointer;transition:.25s}
+.sw-slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+input:checked+.sw-slider{background:var(--ink)}
+input:checked+.sw-slider:before{transform:translateX(18px)}
+.signin-locked{padding:48px 24px;text-align:center}
+.signin-locked-icon{font-size:44px;margin-bottom:12px}
+.signin-locked-title{font-size:14px;font-weight:700;color:var(--mid)}
+.signin-locked-sub{font-size:11px;color:var(--mid);margin-top:6px}
 </style>
 </head>
 <body>
@@ -349,22 +369,50 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
     </div>
   </div>
   <div class="att-panel active" id="att-student">
-    <div class="signin-wrap">
-      <div class="week-badge-att" id="att-week-badge">載入中...</div>
-      <div class="f-label">選擇班級</div>
-      <div class="class-row">
-        <button class="class-chip active" onclick="selectSClass('日戲一',this)">日戲一</button>
-        <button class="class-chip" onclick="selectSClass('進戲一',this)">進戲一</button>
+    <div id="signin-locked-view">
+      <div class="signin-locked">
+        <div class="signin-locked-icon">🔒</div>
+        <div class="signin-locked-title">老師尚未開放本節簽到</div>
+        <div class="signin-locked-sub">請等待老師公布簽到碼</div>
       </div>
-      <div class="f-label">學號</div>
-      <input class="f-input" id="s-sid" placeholder="輸入學號">
-      <div class="f-label">姓名</div>
-      <input class="f-input" id="s-name" placeholder="輸入姓名">
-      <button class="submit-btn" onclick="doSignIn()">簽　到</button>
-      <div class="feedback" id="s-fb"></div>
+    </div>
+    <div id="signin-open-view" style="display:none">
+      <div class="signin-wrap">
+        <div class="week-badge-att" id="att-week-badge">載入中...</div>
+        <div class="f-label">選擇班級</div>
+        <div class="class-row">
+          <button class="class-chip active" onclick="selectSClass('日戲一',this)">日戲一</button>
+          <button class="class-chip" onclick="selectSClass('進戲一',this)">進戲一</button>
+        </div>
+        <div class="f-label">學號</div>
+        <input class="f-input" id="s-sid" placeholder="輸入學號">
+        <div class="f-label">姓名</div>
+        <input class="f-input" id="s-name" placeholder="輸入姓名">
+        <div class="f-label">簽到碼</div>
+        <input class="f-input" id="s-code" placeholder="輸入老師公布的 4 位數字" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+        <button class="submit-btn" onclick="doSignIn()">簽　到</button>
+        <div class="feedback" id="s-fb"></div>
+      </div>
     </div>
   </div>
   <div class="att-panel" id="att-teacher">
+    <div class="session-ctrl">
+      <div class="gps-row">
+        <span class="gps-row-label">📍 GPS 位置驗證</span>
+        <label class="sw"><input type="checkbox" id="gps-toggle-chk" checked><span class="sw-slider"></span></label>
+      </div>
+      <div id="session-open-view">
+        <button class="session-open-btn" onclick="openSession()">🔓 開啟本節簽到</button>
+      </div>
+      <div id="session-active-view" style="display:none">
+        <div class="session-code-box">
+          <div class="session-code-label">本節簽到碼</div>
+          <div class="session-code-display" id="teacher-code-display">----</div>
+          <div class="session-code-sub" id="session-gps-status">—</div>
+        </div>
+        <button class="session-close-btn" onclick="closeSession()">🔒 關閉簽到</button>
+      </div>
+    </div>
     <div class="att-subnav">
       <button class="att-subnav-btn active" onclick="switchAttSub('roll',this)">點名</button>
       <button class="att-subnav-btn" onclick="switchAttSub('roster',this)">名單</button>
@@ -679,19 +727,87 @@ function updateAttBadge(){
   const cur=getCurrentClassDate();const s=schedule.find(x=>x.date===cur);
   document.getElementById('att-week-badge').textContent=s?`${s.mo} ${s.dy} · ${s.title}`:'點名開放中';
 }
+// ── 防代點：Session ──
+let _sessionCache={isOpen:false,code:'',teacherLat:null,teacherLng:null,useGPS:true,maxDistance:200};
+
+function openSession(){
+  const code=String(Math.floor(1000+Math.random()*9000));
+  const useGPS=document.getElementById('gps-toggle-chk').checked;
+  const save=(lat,lng)=>db.collection('drama').doc('session').set({
+    isOpen:true,code,
+    openedAt:firebase.firestore.FieldValue.serverTimestamp(),
+    teacherLat:lat,teacherLng:lng,
+    useGPS:!!(lat&&useGPS),maxDistance:200
+  });
+  if(useGPS){
+    navigator.geolocation.getCurrentPosition(
+      p=>save(p.coords.latitude,p.coords.longitude),
+      ()=>{save(null,null);alert('無法取得位置，已改為純簽到碼模式');},
+      {timeout:8000,enableHighAccuracy:true}
+    );
+  } else { save(null,null); }
+}
+
+function closeSession(){
+  db.collection('drama').doc('session').set({isOpen:false,code:'',teacherLat:null,teacherLng:null,useGPS:false,maxDistance:200});
+}
+
+function getDistance(lat1,lng1,lat2,lng2){
+  const R=6371000,rad=x=>x*Math.PI/180;
+  const dLat=rad(lat2-lat1),dLng=rad(lng2-lng1);
+  const a=Math.sin(dLat/2)**2+Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function updateSessionUI(){
+  const o=_sessionCache.isOpen;
+  const ov=document.getElementById('session-open-view');
+  const av=document.getElementById('session-active-view');
+  if(ov&&av){
+    ov.style.display=o?'none':'block';
+    av.style.display=o?'block':'none';
+    if(o){
+      document.getElementById('teacher-code-display').textContent=_sessionCache.code||'----';
+      document.getElementById('session-gps-status').textContent=
+        (_sessionCache.useGPS&&_sessionCache.teacherLat)?'📍 GPS 驗證開啟':'🔢 僅簽到碼驗證';
+    }
+  }
+  const lv=document.getElementById('signin-locked-view');
+  const sv=document.getElementById('signin-open-view');
+  if(lv&&sv){lv.style.display=o?'none':'block';sv.style.display=o?'block':'none';}
+}
+
 function doSignIn(){
+  if(!_sessionCache.isOpen){showFb('老師尚未開放本節簽到','err');return}
   const sid=document.getElementById('s-sid').value.trim();
   const name=document.getElementById('s-name').value.trim();
-  if(!sid||!name){showFb('請填寫學號與姓名','err');return}
+  const code=document.getElementById('s-code').value.trim();
+  if(!sid||!name||!code){showFb('請填寫所有欄位（含簽到碼）','err');return}
+  if(code!==_sessionCache.code){showFb('簽到碼錯誤，請重新確認','err');return}
   const week=getCurrentClassDate();
   const found=(getRosters()[signinClass]||[]).find(s=>s.sid===sid&&s.name===name);
   if(!found){showFb('查無此學生，請確認班級、學號與姓名','err');return}
   const ex=getRec(signinClass,week,found.sid);
   if(ex==='present'||ex==='signed'){showFb(`${found.name} 已完成簽到 ✓`,'ok');return}
-  setRec(signinClass,week,found.sid,'signed');
-  showFb(`${found.name} 簽到成功！`,'ok');
-  document.getElementById('s-sid').value='';document.getElementById('s-name').value='';
-  if(rollWeek===week&&rollClass===signinClass)renderRoll();
+  const finish=()=>{
+    setRec(signinClass,week,found.sid,'signed');
+    showFb(`${found.name} 簽到成功！`,'ok');
+    ['s-sid','s-name','s-code'].forEach(id=>document.getElementById(id).value='');
+    if(rollWeek===week&&rollClass===signinClass)renderRoll();
+  };
+  if(_sessionCache.useGPS&&_sessionCache.teacherLat){
+    showFb('取得位置中…','ok');
+    navigator.geolocation.getCurrentPosition(
+      p=>{
+        const dist=getDistance(p.coords.latitude,p.coords.longitude,_sessionCache.teacherLat,_sessionCache.teacherLng);
+        const max=_sessionCache.maxDistance||200;
+        if(dist>max){showFb(`距離教室 ${Math.round(dist)}m，需在 ${max}m 內才能簽到`,'err');return}
+        finish();
+      },
+      ()=>showFb('無法取得位置，請開啟定位權限後重試','err'),
+      {timeout:10000,enableHighAccuracy:true}
+    );
+  } else { finish(); }
 }
 function showFb(msg,type){
   const fb=document.getElementById('s-fb');
@@ -788,7 +904,7 @@ function renderReport(){
 })();
 
 // ── 初始化：等 Firestore 兩份資料都載入後才渲染 ──
-let _attLoaded=false,_annLoaded=false;
+let _attLoaded=false,_annLoaded=false,_sesLoaded=false;
 
 const _overlay=document.createElement('div');
 _overlay.style.cssText='position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:var(--f-mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--mid)';
@@ -796,25 +912,33 @@ _overlay.textContent='connecting…';
 document.body.appendChild(_overlay);
 
 function _tryInit(){
-  if(!_attLoaded||!_annLoaded)return;
+  if(!_attLoaded||!_annLoaded||!_sesLoaded)return;
   _overlay.remove();
   renderWeeks();renderAssign();renderAnnounces();updateNavDot();
   buildWeekSel();renderRoll();renderRoster();updateAttBadge();
+  updateSessionUI();
 }
 
-// 監聽點名資料（跨裝置即時同步）
+// 監聽點名資料
 db.collection('drama').doc('att').onSnapshot(snap=>{
   _attCache=snap.exists?(snap.data().data||{}):{};
   if(!_attLoaded){_attLoaded=true;_tryInit();}
   else{renderRoll();renderReport();}
 },err=>{console.error('att snapshot error',err);if(!_attLoaded){_attLoaded=true;_tryInit();}});
 
-// 監聽公告資料（跨裝置即時同步）
+// 監聽公告資料
 db.collection('drama').doc('announces').onSnapshot(snap=>{
   _annCache=snap.exists?(snap.data().list||[]):[];
   if(!_annLoaded){_annLoaded=true;_tryInit();}
   else{renderAnnounces();updateNavDot();}
 },err=>{console.error('ann snapshot error',err);if(!_annLoaded){_annLoaded=true;_tryInit();}});
+
+// 監聽簽到 session（防代點，跨裝置即時同步）
+db.collection('drama').doc('session').onSnapshot(snap=>{
+  _sessionCache=snap.exists?snap.data():{isOpen:false,code:'',teacherLat:null,teacherLng:null,useGPS:true,maxDistance:200};
+  if(!_sesLoaded){_sesLoaded=true;_tryInit();}
+  else{updateSessionUI();}
+},err=>{console.error('session snapshot error',err);if(!_sesLoaded){_sesLoaded=true;_tryInit();}});
 </script>
 </body>
 </html>

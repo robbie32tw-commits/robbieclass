@@ -981,6 +981,7 @@ function switchPage(id,btn){
   document.getElementById(id).classList.add('active');btn.classList.add('active');
   if(id==='attend'){renderRoll();renderRoster();}
   if(id==='announce'){markAnnouncesRead();}
+  if(id==='syllabus'){setTimeout(scrollToToday,60);}
 }
 
 function renderWeeks(){
@@ -994,7 +995,7 @@ function renderWeeks(){
     const dt=parseDate(w.date);const isPast=dt<todayMidnight;
     const isToday=w.date===todayStr;const isNext=nextClass&&w.date===nextClass.date;
     if(!todayInserted&&idx===firstFutureIdx){
-      html+=`<div style="padding:10px 0 6px;display:flex;align-items:center">
+      html+=`<div id="today-marker" style="padding:10px 0 6px;display:flex;align-items:center">
         <div style="width:28px;flex-shrink:0"></div>
         <div style="width:8px;height:1px;background:var(--accent);flex-shrink:0"></div>
         <div style="flex:1;height:1px;background:var(--accent)"></div>
@@ -1015,7 +1016,7 @@ function renderWeeks(){
     </div>`;
   });
   if(!todayInserted){
-    html+=`<div style="padding:10px 0 6px;display:flex;align-items:center">
+    html+=`<div id="today-marker" style="padding:10px 0 6px;display:flex;align-items:center">
       <div style="width:28px;flex-shrink:0"></div>
       <div style="flex:1;height:1px;background:var(--accent)"></div>
       <div style="width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0"></div>
@@ -1025,6 +1026,10 @@ function renderWeeks(){
   document.getElementById('weeks-list').innerHTML=html;
 }
 
+function scrollToToday(){
+  const el=document.getElementById('today-marker');
+  if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+}
 function daysUntil(d){return Math.ceil((d-todayMidnight)/(1000*60*60*24))}
 
 function renderCountdown(a){
@@ -1332,6 +1337,7 @@ function _tryInit(){
   if(!_attLoaded||!_annLoaded||!_sesLoaded||!_leavesLoaded)return;
   _overlay.remove();
   renderWeeks();renderAssign();renderAnnounces();updateNavDot();
+  requestAnimationFrame(()=>setTimeout(scrollToToday,80));
   buildWeekSel();renderRoll();renderRoster();updateAttBadge();
   updateSessionUI();renderLeaves();updateLeaveBadge();
 }

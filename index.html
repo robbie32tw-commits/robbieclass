@@ -181,7 +181,7 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
 .roll-cls-btn{padding:6px 16px;font-size:13px;font-weight:400;border:1px solid var(--light);background:none;cursor:pointer;color:var(--mid);font-family:var(--f-display);transition:all .2s;border-radius:20px;letter-spacing:.03em}
 .roll-cls-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
 .week-sel{padding:7px 12px;font-size:13px;font-family:var(--f-display);font-weight:600;border:2px solid var(--light);background:var(--card);color:var(--ink);cursor:pointer;margin-left:auto;border-radius:10px}
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 12px;background:var(--paper)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 10px;background:var(--paper)}
 .stat-c{background:var(--card);padding:16px 0;text-align:center;border-radius:12px;border:1px solid var(--light);box-shadow:0 1px 4px rgba(44,37,32,.05)}
 .stat-n{font-size:26px;font-weight:300;color:var(--ink);font-family:var(--f-serif)}
 .stat-l{font-size:11px;font-weight:400;color:var(--mid);margin-top:4px;letter-spacing:.5px}
@@ -246,6 +246,40 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 .signin-locked-icon{font-size:44px;margin-bottom:12px}
 .signin-locked-title{font-size:16px;font-weight:700;color:var(--mid)}
 .signin-locked-sub{font-size:13px;color:var(--mid);margin-top:6px}
+/* ── 請假系統 ── */
+.stu-tab-bar{display:flex;border-bottom:1px solid var(--light);background:var(--card)}
+.stu-tab-btn{flex:1;padding:12px 4px;font-family:var(--f-display);font-size:13px;font-weight:400;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--mid);transition:all .2s;margin-bottom:-1px;letter-spacing:.02em;touch-action:manipulation}
+.stu-tab-btn.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:700}
+.stu-panel{display:none}.stu-panel.active{display:block}
+.leave-form-wrap{padding:20px 16px}
+.leave-type-row{display:flex;gap:8px;margin-bottom:18px}
+.leave-type-chip{flex:1;padding:10px 4px;font-family:var(--f-display);font-size:13px;font-weight:400;text-align:center;border:1px solid var(--light);background:var(--card);cursor:pointer;color:var(--mid);transition:all .2s;border-radius:20px;touch-action:manipulation}
+.leave-type-chip.active{border-color:var(--ink);color:var(--ink);background:rgba(44,37,32,.07);font-weight:600}
+.leave-select{width:100%;border:none;border-bottom:2px solid var(--light);background:transparent;font-family:var(--f-display);font-size:16px;font-weight:400;padding:10px 0;color:var(--ink);outline:none;margin-bottom:20px;border-radius:0;transition:border .2s;-webkit-appearance:none}
+.leave-select:focus{border-bottom-color:var(--ink)}
+.leave-item{padding:14px 16px;background:var(--card);border-bottom:1px solid var(--light);position:relative}
+.leave-item-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.leave-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.leave-item-name{font-size:14px;font-weight:700;color:var(--ink);flex:1}
+.leave-item-meta{font-size:12px;color:var(--mid);margin-bottom:6px;display:flex;gap:8px;flex-wrap:wrap}
+.leave-item-reason{font-size:13px;color:var(--ink);line-height:1.5}
+.leave-item-date{font-size:11px;font-family:var(--f-mono);color:var(--mid);margin-top:6px}
+.leave-actions{display:flex;gap:8px;margin-top:12px}
+.leave-approve-btn{flex:1;padding:10px;font-size:13px;font-weight:600;background:#15803d;color:#fff;border:none;cursor:pointer;border-radius:10px;transition:opacity .2s;touch-action:manipulation}
+.leave-reject-btn{flex:1;padding:10px;font-size:13px;font-weight:500;background:none;color:#b91c1c;border:1.5px solid #f0bdb5;cursor:pointer;border-radius:10px;transition:all .2s;touch-action:manipulation}
+.leave-status-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.leave-pending{background:rgba(184,149,106,.15);color:var(--orange)}
+.leave-approved{background:rgba(21,128,61,.12);color:#15803d}
+.leave-rejected{background:rgba(185,28,28,.1);color:#b91c1c}
+.leave-empty{padding:40px 24px;text-align:center;font-size:14px;font-weight:700;color:var(--mid)}
+.leave-filter-bar{padding:10px 16px;display:flex;gap:8px;align-items:center;background:var(--card);border-bottom:1px solid var(--light);overflow-x:auto;scrollbar-width:none}
+.leave-filter-bar::-webkit-scrollbar{display:none}
+.leave-filter-btn{padding:6px 14px;font-size:12px;border:1px solid var(--light);background:none;cursor:pointer;color:var(--mid);font-family:var(--f-display);border-radius:20px;transition:all .2s;white-space:nowrap;touch-action:manipulation}
+.leave-filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+.leave-del-btn{position:absolute;right:12px;top:12px;font-size:16px;color:var(--mid);cursor:pointer;opacity:.3;transition:opacity .2s;background:none;border:none;padding:4px;touch-action:manipulation}
+.leave-del-btn:hover,.leave-del-btn:active{opacity:1;color:#b91c1c}
+.leave-badge-dot{display:inline-block;background:var(--orange);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px;vertical-align:middle}
+.att-btn.on-leave{background:#e8ede8;border-color:#a8c4a8;color:#4a6741}
 </style>
 </head>
 <body>
@@ -385,29 +419,60 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
     </div>
   </div>
   <div class="att-panel active" id="att-student">
-    <div id="signin-locked-view">
-      <div class="signin-locked">
-        <div class="signin-locked-icon">🔒</div>
-        <div class="signin-locked-title">老師尚未開放本節簽到</div>
-        <div class="signin-locked-sub">請等待老師公布簽到碼</div>
+    <div class="stu-tab-bar">
+      <button class="stu-tab-btn active" onclick="switchStuTab('signin',this)">簽到</button>
+      <button class="stu-tab-btn" onclick="switchStuTab('leave',this)">申請請假</button>
+    </div>
+    <div class="stu-panel active" id="stu-signin">
+      <div id="signin-locked-view">
+        <div class="signin-locked">
+          <div class="signin-locked-icon">🔒</div>
+          <div class="signin-locked-title">老師尚未開放本節簽到</div>
+          <div class="signin-locked-sub">請等待老師公布簽到碼</div>
+        </div>
+      </div>
+      <div id="signin-open-view" style="display:none">
+        <div class="signin-wrap">
+          <div class="week-badge-att" id="att-week-badge">載入中...</div>
+          <div class="f-label">選擇班級</div>
+          <div class="class-row">
+            <button class="class-chip active" onclick="selectSClass('日戲一',this)">日戲一</button>
+            <button class="class-chip" onclick="selectSClass('進戲一',this)">進戲一</button>
+          </div>
+          <div class="f-label">學號</div>
+          <input class="f-input" id="s-sid" placeholder="輸入學號">
+          <div class="f-label">姓名</div>
+          <input class="f-input" id="s-name" placeholder="輸入姓名">
+          <div class="f-label">簽到碼</div>
+          <input class="f-input" id="s-code" placeholder="輸入老師公布的 4 位數字" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+          <button class="submit-btn" onclick="doSignIn()">簽　到</button>
+          <div class="feedback" id="s-fb"></div>
+        </div>
       </div>
     </div>
-    <div id="signin-open-view" style="display:none">
-      <div class="signin-wrap">
-        <div class="week-badge-att" id="att-week-badge">載入中...</div>
+    <div class="stu-panel" id="stu-leave">
+      <div class="leave-form-wrap">
         <div class="f-label">選擇班級</div>
-        <div class="class-row">
-          <button class="class-chip active" onclick="selectSClass('日戲一',this)">日戲一</button>
-          <button class="class-chip" onclick="selectSClass('進戲一',this)">進戲一</button>
+        <div class="class-row" id="leave-cls-row">
+          <button class="class-chip active" onclick="selectLeaveClass('日戲一',this)">日戲一</button>
+          <button class="class-chip" onclick="selectLeaveClass('進戲一',this)">進戲一</button>
         </div>
         <div class="f-label">學號</div>
-        <input class="f-input" id="s-sid" placeholder="輸入學號">
+        <input class="f-input" id="l-sid" placeholder="輸入學號">
         <div class="f-label">姓名</div>
-        <input class="f-input" id="s-name" placeholder="輸入姓名">
-        <div class="f-label">簽到碼</div>
-        <input class="f-input" id="s-code" placeholder="輸入老師公布的 4 位數字" maxlength="4" inputmode="numeric" pattern="[0-9]*">
-        <button class="submit-btn" onclick="doSignIn()">簽　到</button>
-        <div class="feedback" id="s-fb"></div>
+        <input class="f-input" id="l-name" placeholder="輸入姓名">
+        <div class="f-label">請假週次</div>
+        <select class="leave-select" id="l-week"></select>
+        <div class="f-label">假別</div>
+        <div class="leave-type-row">
+          <button class="leave-type-chip active" onclick="selectLeaveType('sick',this)">病假</button>
+          <button class="leave-type-chip" onclick="selectLeaveType('personal',this)">事假</button>
+          <button class="leave-type-chip" onclick="selectLeaveType('official',this)">公假</button>
+        </div>
+        <div class="f-label">請假原因</div>
+        <input class="f-input" id="l-reason" placeholder="簡述請假原因">
+        <button class="submit-btn" onclick="submitLeave()">送出請假申請</button>
+        <div class="feedback" id="l-fb"></div>
       </div>
     </div>
   </div>
@@ -433,6 +498,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
       <button class="att-subnav-btn active" onclick="switchAttSub('roll',this)">點名</button>
       <button class="att-subnav-btn" onclick="switchAttSub('roster',this)">名單</button>
       <button class="att-subnav-btn" onclick="switchAttSub('report',this)">報表</button>
+      <button class="att-subnav-btn" id="leave-tab-btn" onclick="switchAttSub('leaves',this)">請假<span id="leave-badge" class="leave-badge-dot" style="display:none">0</span></button>
     </div>
     <div class="att-sub active" id="att-roll">
       <div class="roll-toolbar">
@@ -444,6 +510,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
         <div class="stat-c"><div class="stat-n" id="st-p">0</div><div class="stat-l">出席</div></div>
         <div class="stat-c"><div class="stat-n" id="st-a">0</div><div class="stat-l">缺席</div></div>
         <div class="stat-c"><div class="stat-n" id="st-s">0</div><div class="stat-l">自簽</div></div>
+        <div class="stat-c"><div class="stat-n" id="st-l">0</div><div class="stat-l">請假</div></div>
       </div>
       <div class="quick-row">
         <button class="qb" onclick="markAll('present')">全部出席</button>
@@ -466,6 +533,15 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
         <button class="rep-cls-btn" id="repc-b" onclick="switchRepCls('進戲一',this)">進戲一</button>
       </div>
       <div class="rep-wrap" id="report-content"></div>
+    </div>
+    <div class="att-sub" id="att-leaves">
+      <div class="leave-filter-bar">
+        <button class="leave-filter-btn active" onclick="filterLeaves('all',this)">全部</button>
+        <button class="leave-filter-btn" onclick="filterLeaves('pending',this)">⏳ 待審</button>
+        <button class="leave-filter-btn" onclick="filterLeaves('approved',this)">✓ 已核准</button>
+        <button class="leave-filter-btn" onclick="filterLeaves('rejected',this)">✕ 已拒絕</button>
+      </div>
+      <div id="leave-list"></div>
     </div>
   </div>
 </div>
@@ -549,6 +625,113 @@ const ROSTER_DATA={
 
 const attendWeeks=schedule.filter(s=>s.type!=='off').map(s=>s.date);
 let rollClass='日戲一',rosterClass='日戲一',repClass='日戲一',signinClass='日戲一';
+let leaveClass='日戲一',leaveType='sick',leaveFilter='all';
+let _leavesCache=[];
+function getLeaves(){return JSON.parse(JSON.stringify(_leavesCache))}
+function saveLeaves(list){_leavesCache=list;db.collection('drama').doc('leaves').set({list})}
+
+function switchStuTab(id,btn){
+  document.querySelectorAll('.stu-tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.stu-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('stu-'+id).classList.add('active');
+  if(id==='leave')buildLeaveWeekSel();
+}
+function selectLeaveClass(cls,btn){
+  leaveClass=cls;
+  document.querySelectorAll('#leave-cls-row .class-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectLeaveType(type,btn){
+  leaveType=type;
+  document.querySelectorAll('.leave-type-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function buildLeaveWeekSel(){
+  document.getElementById('l-week').innerHTML=attendWeeks.map(w=>{
+    const s=schedule.find(x=>x.date===w);
+    return`<option value="${w}">${w} ${s?s.title.slice(0,8):''}</option>`;
+  }).join('');
+}
+function showLeaveFb(msg,type){
+  const fb=document.getElementById('l-fb');
+  fb.textContent=msg;fb.className='feedback '+(type==='ok'?'fb-ok':'fb-err');
+  fb.style.display='block';setTimeout(()=>{fb.style.display='none'},3500);
+}
+function submitLeave(){
+  const sid=document.getElementById('l-sid').value.trim();
+  const name=document.getElementById('l-name').value.trim();
+  const week=document.getElementById('l-week').value;
+  const reason=document.getElementById('l-reason').value.trim();
+  if(!sid||!name||!reason){showLeaveFb('請填寫所有欄位','err');return}
+  const found=(getRosters()[leaveClass]||[]).find(s=>s.sid===sid&&s.name===name);
+  if(!found){showLeaveFb('查無此學生，請確認班級、學號與姓名','err');return}
+  const leaves=getLeaves();
+  if(leaves.find(l=>l.cls===leaveClass&&l.sid===sid&&l.week===week)){showLeaveFb('此週已有請假申請紀錄','err');return}
+  const typeMap={sick:'病假',personal:'事假',official:'公假'};
+  leaves.unshift({id:Date.now(),cls:leaveClass,sid,name,week,type:leaveType,typeName:typeMap[leaveType],reason,status:'pending',submittedAt:Date.now()});
+  saveLeaves(leaves);
+  showLeaveFb(`${name} 的請假申請已送出！`,'ok');
+  ['l-sid','l-name','l-reason'].forEach(id=>document.getElementById(id).value='');
+}
+function approveLeave(id){
+  const leaves=getLeaves();const l=leaves.find(x=>x.id===id);if(!l)return;
+  l.status='approved';l.reviewedAt=Date.now();
+  saveLeaves(leaves);
+  setRec(l.cls,l.week,l.sid,'leave');
+  renderLeaves();renderRoll();
+}
+function rejectLeave(id){
+  if(!confirm('確認拒絕此請假申請？'))return;
+  const leaves=getLeaves();const l=leaves.find(x=>x.id===id);if(!l)return;
+  l.status='rejected';l.reviewedAt=Date.now();
+  saveLeaves(leaves);renderLeaves();
+}
+function deleteLeave(id){
+  if(!confirm('確認刪除此請假紀錄？'))return;
+  saveLeaves(getLeaves().filter(l=>l.id!==id));renderLeaves();
+}
+function filterLeaves(f,btn){
+  leaveFilter=f;
+  document.querySelectorAll('.leave-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderLeaves();
+}
+function updateLeaveBadge(){
+  const pending=_leavesCache.filter(l=>l.status==='pending').length;
+  const badge=document.getElementById('leave-badge');
+  if(badge){badge.style.display=pending?'inline':'none';badge.textContent=pending;}
+}
+function renderLeaves(){
+  const leaves=getLeaves().filter(l=>leaveFilter==='all'||l.status===leaveFilter);
+  const statusColor={pending:'var(--orange)',approved:'#15803d',rejected:'#b91c1c'};
+  const statusText={pending:'待審',approved:'已核准',rejected:'已拒絕'};
+  const statusClass={pending:'leave-pending',approved:'leave-approved',rejected:'leave-rejected'};
+  if(!leaves.length){document.getElementById('leave-list').innerHTML=`<div class="leave-empty">目前沒有請假申請</div>`;updateLeaveBadge();return;}
+  const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  document.getElementById('leave-list').innerHTML=leaves.map(l=>{
+    const d=new Date(l.submittedAt);
+    const dateStr=`${d.getFullYear()}/${months[d.getMonth()]}${d.getDate()}日`;
+    const isPending=l.status==='pending';
+    return`<div class="leave-item">
+      <button class="leave-del-btn" onclick="deleteLeave(${l.id})">×</button>
+      <div class="leave-item-top">
+        <div class="leave-status-dot" style="background:${statusColor[l.status]}"></div>
+        <div class="leave-item-name">${l.name}</div>
+        <span class="leave-status-badge ${statusClass[l.status]}">${statusText[l.status]}</span>
+      </div>
+      <div class="leave-item-meta">
+        <span>${l.cls}</span><span>${l.sid}</span><span>${l.week}</span><span>${l.typeName||l.type}</span>
+      </div>
+      <div class="leave-item-reason">${l.reason}</div>
+      <div class="leave-item-date">申請時間：${dateStr}</div>
+      ${isPending?`<div class="leave-actions">
+        <button class="leave-approve-btn" onclick="approveLeave(${l.id})">✓ 核准</button>
+        <button class="leave-reject-btn" onclick="rejectLeave(${l.id})">✕ 拒絕</button>
+      </div>`:''}
+    </div>`;
+  }).join('');
+  updateLeaveBadge();
+}
 
 function getCurrentClassDate(){
   const active=schedule.filter(s=>s.type!=='off');
@@ -845,29 +1028,32 @@ function markAll(val){(getRosters()[rollClass]||[]).forEach(s=>setRec(rollClass,
 function renderRoll(){
   rollWeek=document.getElementById('roll-week-sel').value;
   const students=getRosters()[rollClass]||[];
-  let att=0,abs=0,sig=0,html='';
+  let att=0,abs=0,sig=0,lv=0,html='';
   students.forEach((s,i)=>{
     const rec=getRec(rollClass,rollWeek,s.sid);
-    const isP=rec==='present',isA=rec==='absent',isS=rec==='signed';
-    if(isP||isS)att++;if(isA)abs++;if(isS)sig++;
+    const isP=rec==='present',isA=rec==='absent',isS=rec==='signed',isL=rec==='leave';
+    if(isP||isS)att++;if(isA)abs++;if(isS)sig++;if(isL)lv++;
     const ts=getRecTs(rollClass,rollWeek,s.sid);
     const timeStr=ts?`<span class="rec-time">${fmtTs(ts)}</span>`:'';
+    const chip=isS?'<span class="signed-chip">自簽</span>':isL?'<span class="signed-chip" style="color:#4a6741;background:rgba(74,103,65,.12)">請假</span>':'';
     html+=`<div class="s-row">
       <div class="s-no">${String(i+1).padStart(2,'0')}</div>
-      <div class="s-nm">${s.name}${isS?'<span class="signed-chip">自簽</span>':''}${timeStr}</div>
+      <div class="s-nm">${s.name}${chip}${timeStr}</div>
       <div class="s-sid">${s.sid}</div>
-      <button class="att-btn${isP||isS?' present':isA?' absent':''}" onclick="cycleAtt('${s.sid}')">
-        ${isP||isS?'●':isA?'✕':'○'}
+      <button class="att-btn${isP||isS?' present':isA?' absent':isL?' on-leave':''}" onclick="cycleAtt('${s.sid}')">
+        ${isP||isS?'●':isA?'✕':isL?'假':'○'}
       </button></div>`;
   });
   document.getElementById('roll-list').innerHTML=html||`<div class="empty-hint">尚無學生名單</div>`;
   document.getElementById('st-p').textContent=att;
   document.getElementById('st-a').textContent=abs;
   document.getElementById('st-s').textContent=sig;
+  document.getElementById('st-l').textContent=lv;
 }
 function cycleAtt(sid){
   const cur=getRec(rollClass,rollWeek,sid);
-  setRec(rollClass,rollWeek,sid,(!cur||cur==='absent')?'present':'absent');renderRoll();
+  const next=(!cur||cur==='absent')?'present':(cur==='present'||cur==='signed')?'absent':'present';
+  setRec(rollClass,rollWeek,sid,next);renderRoll();
 }
 function switchRosterCls(cls,btn){
   rosterClass=cls;document.querySelectorAll('.roster-cls-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderRoster();
@@ -898,6 +1084,7 @@ function renderReport(){
       if(rec==='present'){cnt++;return`<td class="cp">●</td>`}
       if(rec==='signed'){cnt++;return`<td class="cs">自</td>`}
       if(rec==='absent')return`<td class="ca">✕</td>`;
+      if(rec==='leave')return`<td style="color:#4a6741;font-weight:700">假</td>`;
       return`<td style="color:var(--mid)">—</td>`;
     }).join('');
     const pct=Math.round(cnt/usedWeeks.length*100);
@@ -924,7 +1111,7 @@ function renderReport(){
 })();
 
 // ── 初始化：等 Firestore 兩份資料都載入後才渲染 ──
-let _attLoaded=false,_annLoaded=false,_sesLoaded=false;
+let _attLoaded=false,_annLoaded=false,_sesLoaded=false,_leavesLoaded=false;
 
 const _overlay=document.createElement('div');
 _overlay.style.cssText='position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:var(--f-mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--mid)';
@@ -932,11 +1119,11 @@ _overlay.textContent='connecting…';
 document.body.appendChild(_overlay);
 
 function _tryInit(){
-  if(!_attLoaded||!_annLoaded||!_sesLoaded)return;
+  if(!_attLoaded||!_annLoaded||!_sesLoaded||!_leavesLoaded)return;
   _overlay.remove();
   renderWeeks();renderAssign();renderAnnounces();updateNavDot();
   buildWeekSel();renderRoll();renderRoster();updateAttBadge();
-  updateSessionUI();
+  updateSessionUI();renderLeaves();updateLeaveBadge();
 }
 
 // 監聽點名資料
@@ -959,6 +1146,13 @@ db.collection('drama').doc('session').onSnapshot(snap=>{
   if(!_sesLoaded){_sesLoaded=true;_tryInit();}
   else{updateSessionUI();}
 },err=>{console.error('session snapshot error',err);if(!_sesLoaded){_sesLoaded=true;_tryInit();}});
+
+// 監聽請假資料
+db.collection('drama').doc('leaves').onSnapshot(snap=>{
+  _leavesCache=snap.exists?(snap.data().list||[]):[];
+  if(!_leavesLoaded){_leavesLoaded=true;_tryInit();}
+  else{renderLeaves();updateLeaveBadge();}
+},err=>{console.error('leaves snapshot error',err);if(!_leavesLoaded){_leavesLoaded=true;_tryInit();}});
 </script>
 </body>
 </html>

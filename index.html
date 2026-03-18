@@ -505,7 +505,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
     <div class="stu-tab-bar">
       <button class="stu-tab-btn active" onclick="switchStuTab('signin',this)">簽到</button>
       <button class="stu-tab-btn" onclick="switchStuTab('leave',this)">申請請假</button>
-      <button class="stu-tab-btn" onclick="switchStuTab('pts',this)">我的積分</button>
     </div>
     <div class="stu-panel active" id="stu-signin">
       <div id="signin-locked-view">
@@ -559,21 +558,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
         <div class="feedback" id="l-fb"></div>
       </div>
     </div>
-    <div class="stu-panel" id="stu-pts">
-      <div class="pts-lookup-wrap">
-        <div class="f-label">選擇班級</div>
-        <div class="class-row" id="pts-lookup-cls-row">
-          <button class="class-chip active" onclick="selectPtsLookupClass('日戲一',this)">日戲一</button>
-          <button class="class-chip" onclick="selectPtsLookupClass('進戲一',this)">進戲一</button>
-        </div>
-        <div class="f-label">學號</div>
-        <input class="f-input" id="pl-sid" placeholder="輸入學號">
-        <div class="f-label">姓名</div>
-        <input class="f-input" id="pl-name" placeholder="輸入姓名">
-        <button class="submit-btn" onclick="lookupStudentPts()">查詢我的積分</button>
-        <div id="pts-lookup-result" style="margin-top:20px"></div>
-      </div>
-    </div>
   </div>
   <div class="att-panel" id="att-teacher">
     <div class="session-ctrl">
@@ -598,7 +582,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
       <button class="att-subnav-btn" onclick="switchAttSub('roster',this)">名單</button>
       <button class="att-subnav-btn" onclick="switchAttSub('report',this)">報表</button>
       <button class="att-subnav-btn" id="leave-tab-btn" onclick="switchAttSub('leaves',this)">請假<span id="leave-badge" class="leave-badge-dot" style="display:none">0</span></button>
-      <button class="att-subnav-btn" onclick="switchAttSub('points',this)">積分</button>
     </div>
     <div class="att-sub active" id="att-roll">
       <div class="roll-toolbar">
@@ -642,69 +625,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
         <button class="leave-filter-btn" onclick="filterLeaves('rejected',this)">✕ 已拒絕</button>
       </div>
       <div id="leave-list"></div>
-    </div>
-    <!-- 積分系統 -->
-    <div class="att-sub" id="att-points">
-      <div class="pts-tab-bar">
-        <button class="pts-tab-btn active" onclick="switchPtsPane('add',this)">➕ 加扣分</button>
-        <button class="pts-tab-btn" onclick="switchPtsPane('summary',this)">🏆 積分排名</button>
-        <button class="pts-tab-btn" onclick="switchPtsPane('records',this)">📋 紀錄</button>
-      </div>
-      <!-- 加扣分 -->
-      <div class="pts-pane active" id="pts-add">
-        <div class="pts-ctrl">
-          <div class="f-label">選擇班級</div>
-          <div class="class-row" id="pts-cls-row">
-            <button class="class-chip active" onclick="selectPtsCls('日戲一',this)">日戲一</button>
-            <button class="class-chip" onclick="selectPtsCls('進戲一',this)">進戲一</button>
-          </div>
-          <div class="f-label">選擇學生</div>
-          <select class="pts-stu-sel" id="pts-stu-sel"></select>
-          <div class="f-label">快速加分</div>
-          <div class="pts-quick-grid">
-            <button class="pts-qb pos" onclick="setPtsDelta(1)">+1</button>
-            <button class="pts-qb pos" onclick="setPtsDelta(2)">+2</button>
-            <button class="pts-qb pos" onclick="setPtsDelta(3)">+3</button>
-            <button class="pts-qb pos" onclick="setPtsDelta(5)">+5</button>
-            <button class="pts-qb neg" onclick="setPtsDelta(-1)">-1</button>
-            <button class="pts-qb neg" onclick="setPtsDelta(-2)">-2</button>
-            <button class="pts-qb neg" onclick="setPtsDelta(-3)">-3</button>
-            <button class="pts-qb neg" onclick="setPtsDelta(-5)">-5</button>
-          </div>
-          <div class="f-label">自訂分數</div>
-          <div class="pts-custom-row">
-            <input class="pts-custom-input" id="pts-custom" type="number" placeholder="例：+10 或 -3" inputmode="numeric">
-            <span class="pts-custom-label">分</span>
-          </div>
-          <div class="f-label">原因</div>
-          <input class="pts-reason-input" id="pts-reason" placeholder="例：課堂表現優秀、遲到…">
-          <button class="pts-submit-btn" onclick="addPtsRecord()">確認送出</button>
-          <div class="feedback" id="pts-fb" style="margin-top:12px"></div>
-        </div>
-      </div>
-      <!-- 積分排名 -->
-      <div class="pts-pane" id="pts-summary">
-        <div class="pts-ctrl" style="padding-bottom:0">
-          <div class="class-row" id="pts-sum-cls-row">
-            <button class="class-chip active" onclick="selectPtsSumCls('日戲一',this)">日戲一</button>
-            <button class="class-chip" onclick="selectPtsSumCls('進戲一',this)">進戲一</button>
-          </div>
-        </div>
-        <div class="pts-summary-wrap">
-          <div class="pts-summary-title">積分排名</div>
-          <div class="pts-summary-list" id="pts-summary-list"></div>
-        </div>
-      </div>
-      <!-- 紀錄 -->
-      <div class="pts-pane" id="pts-records">
-        <div class="pts-ctrl" style="padding-bottom:0">
-          <div class="class-row" id="pts-rec-cls-row">
-            <button class="class-chip active" onclick="selectPtsRecCls('日戲一',this)">日戲一</button>
-            <button class="class-chip" onclick="selectPtsRecCls('進戲一',this)">進戲一</button>
-          </div>
-        </div>
-        <div class="pts-records-wrap" id="pts-record-list"></div>
-      </div>
     </div>
   </div>
 </div>

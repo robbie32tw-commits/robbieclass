@@ -54,6 +54,10 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
 .week-title{font-size:15px;font-weight:500;color:var(--ink);line-height:1.5}
 .week-item.is-past .week-title{color:var(--mid)}
 .week-item.is-off .week-title{color:var(--mid);text-decoration:line-through}
+.week-item.is-today{background:rgba(184,149,106,.1);border-radius:14px;margin:0 -8px;padding:14px 8px;border-bottom:1px solid rgba(184,149,106,.25)}
+.week-item.is-today .week-date .mo{color:var(--accent)}
+.week-item.is-today .week-date .dy{color:var(--accent);font-weight:700}
+.week-item.is-today .week-title{font-weight:700;color:var(--ink)}
 .week-type-tag{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;margin-top:5px;border-radius:20px;letter-spacing:.3px}
 .type-off{background:var(--light);color:var(--mid)}
 .type-film{background:#ece8e2;color:#6b5744}
@@ -972,7 +976,7 @@ function renderWeeks(){
   const mm=today.getMonth()+1;const dd=today.getDate();const todayStr=`${mm}/${dd}`;
   const moNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const todayLabel=`${moNames[today.getMonth()]} ${dd} · 今天`;
-  const firstFutureIdx=schedule.findIndex(s=>parseDate(s.date)>todayMidnight);
+  const firstFutureIdx=schedule.findIndex(s=>parseDate(s.date)>=todayMidnight);
   let html='';let todayInserted=false;
   schedule.forEach((w,idx)=>{
     const dt=parseDate(w.date);const isPast=dt<todayMidnight;
@@ -987,10 +991,10 @@ function renderWeeks(){
       </div>`;
       todayInserted=true;
     }
-    html+=`<div class="week-item${isPast||isToday?' is-past':''}${w.type==='off'?' is-off':''}">
+    html+=`<div class="week-item${isPast?' is-past':''}${isToday?' is-today':''}${w.type==='off'?' is-off':''}">
       <div class="week-row">
         <div class="week-date"><span class="mo">${w.mo}</span><span class="dy">${w.dy}</span></div>
-        <div style="width:${isNext?'10px':'8px'};height:${isNext?'10px':'8px'};border-radius:50%;background:${isNext?'var(--accent)':isPast||isToday?'var(--ink)':'var(--mid)'};border:1px solid ${isNext?'var(--accent)':isPast||isToday?'var(--ink)':'var(--mid)'};flex-shrink:0;z-index:1"></div>
+        <div style="width:${isNext||isToday?'10px':'8px'};height:${isNext||isToday?'10px':'8px'};border-radius:50%;background:${isNext||isToday?'var(--accent)':isPast?'var(--ink)':'var(--mid)'};border:1px solid ${isNext||isToday?'var(--accent)':isPast?'var(--ink)':'var(--mid)'};flex-shrink:0;z-index:1"></div>
         <div class="week-body">
           <div class="week-title">${w.title}${isNext?'<span class="next-badge">下一堂</span>':''}</div>
           <span class="week-type-tag type-${w.type}">${typeLabel[w.type]}</span>

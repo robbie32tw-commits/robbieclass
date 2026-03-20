@@ -296,6 +296,29 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 .stu-tab-btn{flex:1;padding:12px 4px;font-family:var(--f-display);font-size:13px;font-weight:400;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--mid);transition:all .2s;margin-bottom:-1px;letter-spacing:.02em;touch-action:manipulation}
 .stu-tab-btn.active{color:var(--ink);border-bottom-color:var(--ink);font-weight:700}
 .stu-panel{display:none}.stu-panel.active{display:block}
+.status-form-wrap{padding:20px 16px}
+.att-status-result-wrap{margin-top:20px}
+.att-status-current{border-radius:14px;padding:18px 16px;margin-bottom:16px;text-align:center}
+.att-status-current.s-signed,.att-status-current.s-present{background:#dcfce7;border:1.5px solid #86efac}
+.att-status-current.s-absent{background:#fee2e2;border:1.5px solid #fca5a5}
+.att-status-current.s-leave{background:#fef9c3;border:1.5px solid #fde047}
+.att-status-current.s-none{background:var(--card);border:1.5px solid var(--light)}
+.att-status-icon{font-size:36px;margin-bottom:6px}
+.att-status-label{font-size:13px;font-weight:700;letter-spacing:.5px;color:var(--mid);margin-bottom:4px;text-transform:uppercase}
+.att-status-val{font-size:20px;font-weight:700;color:var(--ink)}
+.att-status-date{font-size:12px;color:var(--mid);margin-top:4px}
+.att-history-title{font-size:12px;font-weight:700;color:var(--mid);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
+.att-history-list{border:1px solid var(--light);border-radius:12px;overflow:hidden}
+.att-history-row{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--light);gap:10px}
+.att-history-row:last-child{border-bottom:none}
+.att-history-row.h-current{background:rgba(44,37,32,.04)}
+.att-history-date{font-size:12px;font-family:var(--f-mono);color:var(--mid);min-width:68px}
+.att-history-title-text{flex:1;font-size:13px;color:var(--ink)}
+.att-history-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0}
+.hb-signed,.hb-present{background:#dcfce7;color:#15803d}
+.hb-absent{background:#fee2e2;color:#b91c1c}
+.hb-leave{background:#fef9c3;color:#854d0e}
+.hb-none{background:var(--light);color:var(--mid)}
 .leave-form-wrap{padding:20px 16px}
 .leave-type-row{display:flex;gap:8px;margin-bottom:18px}
 .leave-type-chip{flex:1;padding:10px 4px;font-family:var(--f-display);font-size:13px;font-weight:400;text-align:center;border:1px solid var(--light);background:var(--card);cursor:pointer;color:var(--mid);transition:all .2s;border-radius:20px;touch-action:manipulation}
@@ -309,6 +332,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 .leave-item-meta{font-size:12px;color:var(--mid);margin-bottom:6px;display:flex;gap:8px;flex-wrap:wrap}
 .leave-item-reason{font-size:13px;color:var(--ink);line-height:1.5}
 .leave-item-date{font-size:11px;font-family:var(--f-mono);color:var(--mid);margin-top:6px}
+.leave-synced-hint{font-size:11px;font-weight:700;color:#15803d;margin-top:6px;letter-spacing:.3px}
 .leave-actions{display:flex;gap:8px;margin-top:12px}
 .leave-approve-btn{flex:1;padding:10px;font-size:13px;font-weight:600;background:#15803d;color:#fff;border:none;cursor:pointer;border-radius:10px;transition:opacity .2s;touch-action:manipulation}
 .leave-reject-btn{flex:1;padding:10px;font-size:13px;font-weight:500;background:none;color:#b91c1c;border:1.5px solid #f0bdb5;cursor:pointer;border-radius:10px;transition:all .2s;touch-action:manipulation}
@@ -388,13 +412,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
   <div class="course-sub">Introduction to Drama &amp; Theatre</div>
   <div class="header-deco">⬡</div>
 </div>
-<div class="greeter">
-  <img src="assets/robot.png" class="greeter-robot" alt="助教機器人">
-  <div class="greeter-text">
-    <div class="greeter-hi" id="greeter-hi">你好！</div>
-    <div class="greeter-msg" id="greeter-msg">歡迎來到戲劇與劇場導論 🎭</div>
-  </div>
-</div>
 <div class="nav-wrap">
   <div class="nav">
     <button class="nav-btn" onclick="switchPage('syllabus',this)">
@@ -403,13 +420,13 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
     <button class="nav-btn" onclick="switchPage('assign',this)">
       <span class="nav-icon-wrap"><svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></span>作業
     </button>
-    <button class="nav-btn active" id="nav-announce" onclick="switchPage('announce',this)">
+    <button class="nav-btn" id="nav-announce" onclick="switchPage('announce',this)">
       <span class="nav-icon-wrap"><svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>公告
     </button>
     <button class="nav-btn" onclick="switchPage('teacher',this)">
       <span class="nav-icon-wrap"><svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>老師
     </button>
-    <button class="nav-btn" onclick="switchPage('attend',this)">
+    <button class="nav-btn active" onclick="switchPage('attend',this)">
       <span class="nav-icon-wrap"><svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>點名
     </button>
   </div>
@@ -434,7 +451,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 </div>
 
 <!-- 公告欄 -->
-<div id="announce" class="page active">
+<div id="announce" class="page">
   <div class="ann-tab-bar">
     <button class="ann-tab-btn active" onclick="switchAnnTab('ann-news',this)">📢 公告</button>
     <button class="ann-tab-btn" onclick="switchAnnTab('ann-groups',this)">👥 分組名單</button>
@@ -443,7 +460,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
   <div class="ann-pane active" id="ann-news">
     <div class="announce-toolbar">
       <h3>公告欄</h3>
-      <button class="announce-add-btn" onclick="toggleAnnounceForm()">＋ 新增公告</button>
+      <button class="announce-add-btn" id="announce-add-btn" onclick="toggleAnnounceForm()" style="display:none">＋ 新增公告</button>
     </div>
     <div class="announce-form" id="announce-form">
       <input class="announce-inp" id="ann-title" placeholder="公告標題">
@@ -520,17 +537,25 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 </div>
 
 <!-- 點名 -->
-<div id="attend" class="page">
+<div id="attend" class="page active">
+  <div class="greeter">
+    <img src="assets/robot.png" class="greeter-robot" alt="助教機器人">
+    <div class="greeter-text">
+      <div class="greeter-hi" id="greeter-hi">你好！</div>
+      <div class="greeter-msg" id="greeter-msg">歡迎來到戲劇與劇場導論 🎭</div>
+    </div>
+  </div>
   <div class="att-mode-bar">
     <div class="att-mode-label">身份切換</div>
     <div class="att-mode-toggle">
-      <button class="att-mode-btn active" id="amb-teacher" onclick="tryTeacherLogin()">老師</button>
-      <button class="att-mode-btn" id="amb-student" onclick="setAttMode('student')">學生</button>
+      <button class="att-mode-btn" id="amb-teacher" onclick="tryTeacherLogin()">老師</button>
+      <button class="att-mode-btn active" id="amb-student" onclick="setAttMode('student')">學生</button>
     </div>
   </div>
   <div class="att-panel active" id="att-student">
     <div class="stu-tab-bar">
       <button class="stu-tab-btn active" onclick="switchStuTab('signin',this)">簽到</button>
+      <button class="stu-tab-btn" onclick="switchStuTab('status',this)">出席查詢</button>
       <button class="stu-tab-btn" onclick="switchStuTab('leave',this)">申請請假</button>
     </div>
     <div class="stu-panel active" id="stu-signin">
@@ -560,6 +585,21 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
         </div>
       </div>
     </div>
+    <div class="stu-panel" id="stu-status">
+      <div class="status-form-wrap">
+        <div class="f-label">選擇班級</div>
+        <div class="class-row" id="status-cls-row">
+          <button class="class-chip active" onclick="selectStatusClass('日戲一',this)">日戲一</button>
+          <button class="class-chip" onclick="selectStatusClass('進戲一',this)">進戲一</button>
+        </div>
+        <div class="f-label">學號</div>
+        <input class="f-input" id="st-sid" placeholder="輸入學號">
+        <div class="f-label">姓名</div>
+        <input class="f-input" id="st-name" placeholder="輸入姓名">
+        <button class="submit-btn" onclick="checkAttStatus()">查詢出席狀態</button>
+        <div id="att-status-result"></div>
+      </div>
+    </div>
     <div class="stu-panel" id="stu-leave">
       <div class="leave-form-wrap">
         <div class="f-label">選擇班級</div>
@@ -571,7 +611,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
         <input class="f-input" id="l-sid" placeholder="輸入學號">
         <div class="f-label">姓名</div>
         <input class="f-input" id="l-name" placeholder="輸入姓名">
-        <div class="f-label">請假週次</div>
+        <div class="f-label">請假日期</div>
         <select class="leave-select" id="l-week"></select>
         <div class="f-label">假別</div>
         <div class="leave-type-row">
@@ -759,7 +799,7 @@ const ROSTER_DATA={
     {name:'許紹祺',sid:'11451101'},{name:'張赫',sid:'11451102'},{name:'謝唯澤',sid:'11451103'},
     {name:'廖柏源',sid:'11451104'},{name:'林晉愷',sid:'11451105'},{name:'張名杰',sid:'11451106'},
     {name:'楊璽曄',sid:'11451107'},{name:'粘仕杰',sid:'11451108'},{name:'林勵餚',sid:'11451109'},
-    {name:'石承均',sid:'11451110'},{name:'楊晏婕',sid:'11411111'},{name:'周亭安',sid:'11451112'},
+    {name:'石承均',sid:'11451110'},{name:'楊晏婕',sid:'11451111'},{name:'周亭安',sid:'11451112'},
     {name:'靳詠婷',sid:'11451113'},{name:'賴冠蓉',sid:'11451114'},{name:'張尹瑄',sid:'11451115'},
     {name:'張淨涵',sid:'11451116'},{name:'黃心宥',sid:'11451117'},{name:'葉靖純',sid:'11451118'},
     {name:'王薏雯',sid:'11451119'},{name:'鄭景謙',sid:'11451120'},{name:'黎晉',sid:'11451121'},
@@ -799,26 +839,26 @@ function switchAnnTab(id,btn){
 const GROUPS=[
   {g:'A',m:['葉靖純','黃雅榆','卓郁芯','張馨云']},
   {g:'B',m:['許佳心','李璿','蘇珮文','王少辰']},
-  {g:'C',m:['張尹瑄','陳慧芝','李睿昕','謝予栙']},
-  {g:'D',m:['望清鋐','林晉愷','尹中釴','鍾承芯']},
+  {g:'C',m:['張尹瑄','陳慧芠','李睿昕','謝予梣']},
+  {g:'D',m:['望清鋐','林晉愷','尹中釩','鍾承芯']},
   {g:'E',m:['馮姿穎','沈佳穎','翁梓桐','巫宥蓁']},
   {g:'F',m:['李妍蓁','吳敏郁','廖喆禹','山根真實']},
   {g:'G',m:['靳詠婷','賴冠蓉','李嘉珍','李芝蓉']},
   {g:'H',m:['張赫','游芝蕙','安海媛','張家維']},
-  {g:'I',m:['周亭安','余曉妍','蕭詠晴','洪睿翎']},
+  {g:'I',m:['周亭安','余曉姸','蕭詠晴','洪睿翎']},
   {g:'J',m:['張子儀','林昕霓','戚可楓','陳曦']},
   {g:'K',m:['張淨涵','朱宥蓁','王婷婷','李曉芊']},
-  {g:'L',m:['黎晉','陳宥安','盧思繁','李昶毅']},
+  {g:'L',m:['黎晉','陳宥安','盧思縈','李昶毅']},
   {g:'M',m:['鄭雅慧','楊璽曄','劉哲維','徐翊娟']},
-  {g:'N',m:['謝唯澤','許志嘉','連奕愷','郭濬衡']},
+  {g:'N',m:['謝唯澤','許志嘉','連奕愷','郭濬銜']},
   {g:'O',m:['簡熏誼','游邦弘','陳品勳','李宥德']},
-  {g:'P',m:['彭儀縑','尹筑帆','徐均宥','楊詠淋']},
+  {g:'P',m:['彭儀緁','尹筑帆','徐均宥','楊詠淋']},
   {g:'Q',m:['張名杰','黃心宥','李泓毅','徐楚為']},
-  {g:'R',m:['林勵餡','廖芷萱','董宥廷','李啟瑞']},
-  {g:'S',m:['江宸儀','王蕙雯','吳錦裕','連光皓','秦康傑']},
-  {g:'T',m:['粘仕杰','黃晏栢','嚴品鈞','洪幃恩']},
+  {g:'R',m:['林勵餚','廖芷萱','董宥廷','李啟瑞']},
+  {g:'S',m:['江宸儀','王薏雯','吳錦裕','連光皓','秦康傑']},
+  {g:'T',m:['粘仕杰','黃晏柅','嚴品鈞','洪帷恩']},
   {g:'U',m:['石承均','許紹棋','陳力維','郭承澤']},
-  {g:'V',m:['陳羿嫺','楊晏婕','孫宜安','黃家芸','廖柏源']},
+  {g:'V',m:['陳羿嫙','楊晏婕','孫宜安','黃家芸','廖柏源']},
   {g:'W',m:['蔡翔丞','鄭景謙','蘇哲永','葉宥均']},
 ];
 function renderGroups(q){
@@ -839,15 +879,70 @@ function selectLeaveClass(cls,btn){
   document.querySelectorAll('#leave-cls-row .class-chip').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
+
+/* ── 出席查詢 ── */
+let statusClass='日戲一';
+function selectStatusClass(cls,btn){
+  statusClass=cls;
+  document.querySelectorAll('#status-cls-row .class-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('att-status-result').innerHTML='';
+}
+function checkAttStatus(){
+  const sid=document.getElementById('st-sid').value.trim();
+  const name=document.getElementById('st-name').value.trim();
+  const res=document.getElementById('att-status-result');
+  if(!sid||!name){res.innerHTML='<div class="feedback fb-err" style="display:block;margin-top:14px">請填寫學號與姓名</div>';return;}
+  const roster=(getRosters()[statusClass]||[]);
+  const found=roster.find(s=>s.sid===sid&&s.name===name);
+  if(!found){res.innerHTML='<div class="feedback fb-err" style="display:block;margin-top:14px">查無此學生，請確認班級、學號與姓名</div>';return;}
+  saveStudentProfile(statusClass,found.sid,found.name);
+  const curWeek=getCurrentClassDate();
+  const recLabels={present:{icon:'✓',label:'出席',cls:'s-present',badge:'hb-present',text:'出席'},absent:{icon:'✗',label:'缺席',cls:'s-absent',badge:'hb-absent',text:'缺席'},signed:{icon:'✓',label:'自行簽到',cls:'s-signed',badge:'hb-signed',text:'自行簽到'},leave:{icon:'◎',label:'請假',cls:'s-leave',badge:'hb-leave',text:'請假'},null:{icon:'—',label:'未記錄',cls:'s-none',badge:'hb-none',text:'未記錄'}};
+  function info(v){return recLabels[v]||recLabels['null'];}
+  const curRec=getRec(statusClass,curWeek,found.sid);
+  const curInfo=info(curRec);
+  const curSch=schedule.find(x=>x.date===curWeek);
+  let html=`<div class="att-status-result-wrap">
+    <div class="att-status-current ${curInfo.cls}">
+      <div class="att-status-icon">${curInfo.icon}</div>
+      <div class="att-status-label">本堂出席狀態</div>
+      <div class="att-status-val">${curInfo.text}</div>
+      <div class="att-status-date">${curWeek}${curSch?' · '+curSch.title:''}</div>
+    </div>`;
+  const histWeeks=attendWeeks.filter(w=>w!==curWeek);
+  if(histWeeks.length>0){
+    html+=`<div class="att-history-title">歷次出席紀錄</div><div class="att-history-list">`;
+    histWeeks.slice().reverse().forEach(w=>{
+      const v=getRec(statusClass,w,found.sid);
+      const inf=info(v);
+      const sch=schedule.find(x=>x.date===w);
+      html+=`<div class="att-history-row">
+        <div class="att-history-date">${w}</div>
+        <div class="att-history-title-text">${sch?sch.title.slice(0,12):''}</div>
+        <div class="att-history-badge ${inf.badge}">${inf.text}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`</div>`;
+  res.innerHTML=html;
+}
 function selectLeaveType(type,btn){
   leaveType=type;
   document.querySelectorAll('.leave-type-chip').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
+function fmtLeaveDate(w){
+  const d=parseDate(w);
+  const days=['日','一','二','三','四','五','六'];
+  return`${d.getMonth()+1}月${d.getDate()}日（週${days[d.getDay()]}）`;
+}
 function buildLeaveWeekSel(){
+  const nextWeek=attendWeeks.find(w=>parseDate(w)>=todayMidnight)||attendWeeks[attendWeeks.length-1];
   document.getElementById('l-week').innerHTML=attendWeeks.map(w=>{
     const s=schedule.find(x=>x.date===w);
-    return`<option value="${w}">${w} ${s?s.title.slice(0,8):''}</option>`;
+    return`<option value="${w}"${w===nextWeek?' selected':''}>${fmtLeaveDate(w)}${s?' · '+s.title.slice(0,10):''}</option>`;
   }).join('');
 }
 function showLeaveFb(msg,type){
@@ -863,6 +958,7 @@ function submitLeave(){
   if(!sid||!name||!reason){showLeaveFb('請填寫所有欄位','err');return}
   const found=(getRosters()[leaveClass]||[]).find(s=>s.sid===sid&&s.name===name);
   if(!found){showLeaveFb('查無此學生，請確認班級、學號與姓名','err');return}
+  saveStudentProfile(leaveClass,found.sid,found.name);
   const leaves=getLeaves();
   if(leaves.find(l=>l.cls===leaveClass&&l.sid===sid&&l.week===week)){showLeaveFb('此週已有請假申請紀錄','err');return}
   const typeMap={sick:'病假',personal:'事假',official:'公假'};
@@ -917,10 +1013,11 @@ function renderLeaves(){
         <span class="leave-status-badge ${statusClass[l.status]}">${statusText[l.status]}</span>
       </div>
       <div class="leave-item-meta">
-        <span>${l.cls}</span><span>${l.sid}</span><span>${l.week}</span><span>${l.typeName||l.type}</span>
+        <span>${l.cls}</span><span>${l.sid}</span><span>${fmtLeaveDate(l.week)}</span><span>${l.typeName||l.type}</span>
       </div>
       <div class="leave-item-reason">${l.reason}</div>
       <div class="leave-item-date">申請時間：${dateStr}</div>
+      ${l.status==='approved'?`<div class="leave-synced-hint">✓ 已自動同步至點名系統</div>`:''}
       ${isPending?`<div class="leave-actions">
         <button class="leave-approve-btn" onclick="approveLeave(${l.id})">✓ 核准</button>
         <button class="leave-reject-btn" onclick="rejectLeave(${l.id})">✕ 拒絕</button>
@@ -1064,11 +1161,13 @@ function updateNavDot(){
 }
 function markAnnouncesRead(){saveLastRead();updateNavDot();}
 function toggleAnnounceForm(){
+  if(!_tokenValid()){alert('請先以老師身份登入');return;}
   const f=document.getElementById('announce-form');
   f.classList.toggle('open');
   if(f.classList.contains('open'))document.getElementById('ann-title').focus();
 }
 function addAnnounce(){
+  if(!_tokenValid()){alert('請先以老師身份登入');return;}
   const title=document.getElementById('ann-title').value.trim();
   const body=document.getElementById('ann-body').value.trim();
   if(!title){alert('請輸入公告標題');return}
@@ -1082,6 +1181,7 @@ function addAnnounce(){
   updateNavDot();
 }
 function deleteAnnounce(id){
+  if(!_tokenValid()){alert('請先以老師身份登入');return;}
   if(!confirm('確認刪除此公告？'))return;
   saveAnnounces(getAnnounces().filter(a=>a.id!==id));
   renderAnnounces();updateNavDot();
@@ -1095,7 +1195,7 @@ function renderAnnounces(){
     const dateStr=`${d.getFullYear()}/${months[d.getMonth()]}${d.getDate()}日`;
     const isNew=a.ts>last;
     return`<div class="announce-item">
-      <button class="announce-del" onclick="deleteAnnounce(${a.id})">×</button>
+      ${_tokenValid()?`<button class="announce-del" onclick="deleteAnnounce(${a.id})">×</button>`:''}
       <div class="announce-item-top">
         <div class="announce-pin" style="${isNew?'':'background:var(--mid)'}"></div>
         <div class="announce-item-title">${a.title}${isNew?'<span class="announce-new-badge"></span>':''}</div>
@@ -1111,11 +1211,32 @@ function setAttMode(m){
   document.getElementById('amb-student').classList.toggle('active',m==='student');
   document.getElementById('att-teacher').classList.toggle('active',m==='teacher');
   document.getElementById('att-student').classList.toggle('active',m==='student');
+  updateAnnounceUI();
+}
+function updateAnnounceUI(){
+  const t=_tokenValid();
+  const btn=document.getElementById('announce-add-btn');
+  if(btn)btn.style.display=t?'':'none';
+  renderAnnounces();
 }
 
 /* ── 老師密碼登入 ── */
 let _configCache={};
 function _getCurrentPwd(){return _configCache.teacherPwd||'drama2026';}
+/* ── 學生資料記憶 ── */
+function saveStudentProfile(cls,sid,name){try{localStorage.setItem('drama_student_profile',JSON.stringify({cls,sid,name}));}catch(e){}}
+function loadStudentProfile(){try{const v=localStorage.getItem('drama_student_profile');return v?JSON.parse(v):null;}catch(e){return null;}}
+function prefillStudentForms(){
+  const p=loadStudentProfile();if(!p)return;
+  ['s-sid','st-sid','l-sid'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=p.sid;});
+  ['s-name','st-name','l-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=p.name;});
+  signinClass=p.cls;
+  document.querySelectorAll('#stu-signin .class-chip').forEach(b=>b.classList.toggle('active',b.textContent===p.cls));
+  leaveClass=p.cls;
+  document.querySelectorAll('#leave-cls-row .class-chip').forEach(b=>b.classList.toggle('active',b.textContent===p.cls));
+  statusClass=p.cls;
+  document.querySelectorAll('#status-cls-row .class-chip').forEach(b=>b.classList.toggle('active',b.textContent===p.cls));
+}
 function _getToken(){try{return localStorage.getItem('drama_teacher_token');}catch(e){return null;}}
 function _setToken(pwd){try{localStorage.setItem('drama_teacher_token',btoa(unescape(encodeURIComponent(pwd))));}catch(e){}}
 function _clearToken(){try{localStorage.removeItem('drama_teacher_token');}catch(e){}}
@@ -1255,6 +1376,7 @@ function doSignIn(){
   const found=(getRosters()[signinClass]||[]).find(s=>s.sid===sid&&s.name===name);
   if(!found){showFb('查無此學生，請確認班級、學號與姓名','err');return}
   const ex=getRec(signinClass,week,found.sid);
+  saveStudentProfile(signinClass,found.sid,found.name);
   if(ex==='present'||ex==='signed'){showFb(`${found.name} 已完成簽到 ✓`,'ok');return}
   const finish=()=>{
     setRec(signinClass,week,found.sid,'signed');
@@ -1391,6 +1513,7 @@ function _tryInit(){
   requestAnimationFrame(()=>setTimeout(scrollToToday,80));
   buildWeekSel();renderRoll();renderRoster();updateAttBadge();
   updateSessionUI();renderLeaves();updateLeaveBadge();
+  prefillStudentForms();updateAnnounceUI();
 }
 
 // 監聽點名資料

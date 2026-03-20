@@ -181,7 +181,7 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
 .att-mode-bar{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--light);display:flex;justify-content:space-between;align-items:center}
 .att-mode-label{font-size:13px;font-weight:700;color:var(--mid)}
 .att-mode-toggle{display:flex;border:1px solid var(--light);overflow:hidden;border-radius:8px}
-.att-mode-btn{padding:7px 18px;font-family:var(--f-display);font-size:13px;font-weight:400;background:none;border:none;cursor:pointer;color:var(--mid);transition:all .2s;border-radius:0;letter-spacing:.02em}
+.att-mode-btn{padding:10px 36px;font-family:var(--f-display);font-size:13px;font-weight:400;background:none;border:none;cursor:pointer;color:var(--mid);transition:all .2s;border-radius:0;letter-spacing:.02em}
 .att-mode-btn.active{background:var(--ink);color:var(--paper)}
 .att-panel{display:none}.att-panel.active{display:block}
 .signin-wrap{padding:20px 16px}
@@ -548,8 +548,8 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
   <div class="att-mode-bar">
     <div class="att-mode-label">身份切換</div>
     <div class="att-mode-toggle">
-      <button class="att-mode-btn" id="amb-teacher" onclick="tryTeacherLogin()">老師</button>
       <button class="att-mode-btn active" id="amb-student" onclick="setAttMode('student')">學生</button>
+      <button class="att-mode-btn" id="amb-teacher" onclick="tryTeacherLogin()">老師</button>
     </div>
   </div>
   <div class="att-panel active" id="att-student">

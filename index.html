@@ -59,7 +59,7 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
 .week-title{font-size:15px;font-weight:500;color:var(--ink);line-height:1.5}
 .week-item.is-past .week-title{color:var(--mid)}
 .week-item.is-off .week-title{color:var(--mid);text-decoration:line-through}
-.week-item.is-today{background:rgba(184,149,106,.1);border-radius:14px;margin:0 -8px;padding:14px 8px;border-bottom:1px solid rgba(184,149,106,.25)}
+.week-item.is-today{background:rgba(184,149,106,.13);border-radius:14px;margin:0 -8px;padding:14px 8px;border:1.5px solid rgba(184,149,106,.4);border-bottom:1.5px solid rgba(184,149,106,.4)}
 .week-item.is-today .week-date .mo{color:var(--accent)}
 .week-item.is-today .week-date .dy{color:var(--accent);font-weight:700}
 .week-item.is-today .week-title{font-weight:700;color:var(--ink)}
@@ -1159,11 +1159,13 @@ function renderWeeks(){
   const moNames=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const todayLabel=`${moNames[today.getMonth()]} ${dd} · 今天`;
   const firstFutureIdx=schedule.findIndex(s=>parseDate(s.date)>=todayMidnight);
+  const hasTodayClass=schedule.some(s=>s.date===todayStr);
   let html='';let todayInserted=false;
   schedule.forEach((w,idx)=>{
     const dt=parseDate(w.date);const isPast=dt<todayMidnight;
-    const isToday=w.date===todayStr;const isNext=nextClass&&w.date===nextClass.date;
-    if(!todayInserted&&idx===firstFutureIdx){
+    const isToday=w.date===todayStr;const isNext=!isToday&&nextClass&&w.date===nextClass.date;
+    // 非上課當日才在兩項目之間插入今日線
+    if(!todayInserted&&!hasTodayClass&&idx===firstFutureIdx){
       html+=`<div id="today-marker" style="padding:10px 0 6px;display:flex;align-items:center">
         <div style="width:28px;flex-shrink:0"></div>
         <div style="width:8px;height:1px;background:var(--accent);flex-shrink:0"></div>
@@ -1173,8 +1175,17 @@ function renderWeeks(){
       </div>`;
       todayInserted=true;
     }
-    html+=`<div class="week-item${isPast?' is-past':''}${isToday?' is-today':''}${w.type==='off'?' is-off':''}">
-      <div class="week-row">
+    // 上課當日：id 放在 week-item 本身，今日線整合到卡片內頂部
+    html+=`<div${isToday?' id="today-marker"':''} class="week-item${isPast?' is-past':''}${isToday?' is-today':''}${w.type==='off'?' is-off':''}">`;
+    if(isToday){
+      html+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <div style="flex:1;height:1px;background:var(--accent);opacity:.6"></div>
+        <span style="font-size:9px;letter-spacing:2px;font-family:var(--f-mono);color:var(--accent);white-space:nowrap">${todayLabel.toUpperCase()}</span>
+        <div style="flex:1;height:1px;background:var(--accent);opacity:.6"></div>
+      </div>`;
+      todayInserted=true;
+    }
+    html+=`<div class="week-row">
         <div class="week-date"><span class="mo">${w.mo}</span><span class="dy">${w.dy}</span></div>
         <div style="width:${isNext||isToday?'10px':'8px'};height:${isNext||isToday?'10px':'8px'};border-radius:50%;background:${isNext||isToday?'var(--accent)':isPast?'var(--ink)':'var(--mid)'};border:1px solid ${isNext||isToday?'var(--accent)':isPast?'var(--ink)':'var(--mid)'};flex-shrink:0;z-index:1"></div>
         <div class="week-body">

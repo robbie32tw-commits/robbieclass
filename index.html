@@ -492,6 +492,13 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 
 <!-- 公告欄 -->
 <div id="announce" class="page">
+  <div class="greeter">
+    <img src="assets/robot.png" class="greeter-robot" alt="助教機器人">
+    <div class="greeter-text">
+      <div class="greeter-hi" id="ann-greeter-hi">你好！</div>
+      <div class="greeter-msg" id="ann-greeter-msg">歡迎來到戲劇與劇場導論 🎭</div>
+    </div>
+  </div>
   <div class="ann-tab-bar">
     <button class="ann-tab-btn active" onclick="switchAnnTab('ann-news',this)">📢 公告</button>
     <button class="ann-tab-btn" onclick="switchAnnTab('ann-groups',this)">👥 分組名單</button>
@@ -1633,6 +1640,8 @@ function renderReport(){
   const m=msgs[Math.floor(Math.random()*msgs.length)];
   document.getElementById('greeter-hi').textContent=hi;
   document.getElementById('greeter-msg').textContent=m;
+  document.getElementById('ann-greeter-hi').textContent=hi;
+  document.getElementById('ann-greeter-msg').textContent=m;
 })();
 
 // ── 初始化：等 Firestore 兩份資料都載入後才渲染 ──

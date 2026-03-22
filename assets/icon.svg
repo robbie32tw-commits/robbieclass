@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="#2c2520"/>
+  <!-- Decorative arc top -->
+  <path d="M128 200 Q256 100 384 200" fill="none" stroke="#b8956a" stroke-width="8" stroke-linecap="round" opacity=".4"/>
+  <!-- Comedy mask (left) -->
+  <ellipse cx="190" cy="248" rx="68" ry="78" fill="none" stroke="#e8e2d9" stroke-width="10"/>
+  <path d="M162 268 Q190 290 218 268" fill="none" stroke="#e8e2d9" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="175" cy="240" r="7" fill="#e8e2d9"/>
+  <circle cx="205" cy="240" r="7" fill="#e8e2d9"/>
+  <!-- Tragedy mask (right) -->
+  <ellipse cx="322" cy="272" rx="68" ry="78" fill="none" stroke="#b8956a" stroke-width="10"/>
+  <path d="M294 296 Q322 274 350 296" fill="none" stroke="#b8956a" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="307" cy="262" r="7" fill="#b8956a"/>
+  <circle cx="337" cy="262" r="7" fill="#b8956a"/>
+  <!-- Overlap shadow -->
+  <ellipse cx="256" cy="260" rx="14" ry="82" fill="#2c2520" opacity=".7"/>
+  <!-- Bottom text line -->
+  <rect x="156" y="370" width="200" height="6" rx="3" fill="#b8956a" opacity=".5"/>
+  <rect x="196" y="388" width="120" height="4" rx="2" fill="#9a8d82" opacity=".4"/>
+</svg>

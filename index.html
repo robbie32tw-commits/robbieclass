@@ -1596,11 +1596,12 @@ function renderReport(){
   if(!usedWeeks.length){document.getElementById('report-content').innerHTML=`<div class="empty-hint">尚無點名紀錄</div>`;return}
   const pctMap={};
   let lowStudents=[];
+  function recVal(r){return r?(typeof r==='object'?r.v:r):null}
   students.forEach(s=>{
     let cnt=0;
     usedWeeks.forEach(w=>{
-      const rec=clsA[w]&&clsA[w][s.sid];
-      if(rec==='present'||rec==='signed')cnt++;
+      const v=recVal(clsA[w]&&clsA[w][s.sid]);
+      if(v==='present'||v==='signed')cnt++;
     });
     const pct=Math.round(cnt/usedWeeks.length*100);
     pctMap[s.sid]=pct;
@@ -1612,11 +1613,11 @@ function renderReport(){
   let html=summary+`<table class="rep-table"><thead><tr><th>姓名</th>${usedWeeks.map(w=>`<th>${w}</th>`).join('')}<th>出席率</th></tr></thead><tbody>`;
   students.forEach(s=>{
     const cells=usedWeeks.map(w=>{
-      const rec=clsA[w]&&clsA[w][s.sid];
-      if(rec==='present')return`<td class="cp">●</td>`;
-      if(rec==='signed')return`<td class="cs">自</td>`;
-      if(rec==='absent')return`<td class="ca">✕</td>`;
-      if(rec==='leave')return`<td style="color:#4a6741;font-weight:700">假</td>`;
+      const v=recVal(clsA[w]&&clsA[w][s.sid]);
+      if(v==='present')return`<td class="cp">●</td>`;
+      if(v==='signed')return`<td class="cs">自</td>`;
+      if(v==='absent')return`<td class="ca">✕</td>`;
+      if(v==='leave')return`<td style="color:#4a6741;font-weight:700">假</td>`;
       return`<td style="color:var(--mid)">—</td>`;
     }).join('');
     const pct=pctMap[s.sid];

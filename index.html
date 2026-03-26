@@ -731,11 +731,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
       <div id="signin-open-view" style="display:none">
         <div class="signin-wrap">
           <div class="week-badge-att" id="att-week-badge">載入中...</div>
-          <div class="f-label">選擇班級</div>
-          <div class="class-row">
-            <button class="class-chip active" onclick="selectSClass('日戲一',this)">日戲一</button>
-            <button class="class-chip" onclick="selectSClass('進戲一',this)">進戲一</button>
-          </div>
           <div class="f-label">學號</div>
           <input class="f-input" id="s-sid" placeholder="輸入學號">
           <div class="f-label">姓名</div>
@@ -750,11 +745,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
     </div>
     <div class="stu-panel" id="stu-status">
       <div class="status-form-wrap">
-        <div class="f-label">選擇班級</div>
-        <div class="class-row" id="status-cls-row">
-          <button class="class-chip active" onclick="selectStatusClass('日戲一',this)">日戲一</button>
-          <button class="class-chip" onclick="selectStatusClass('進戲一',this)">進戲一</button>
-        </div>
         <div class="f-label">學號</div>
         <input class="f-input" id="st-sid" placeholder="輸入學號">
         <div class="f-label">姓名</div>
@@ -765,11 +755,6 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
     </div>
     <div class="stu-panel" id="stu-leave">
       <div class="leave-form-wrap">
-        <div class="f-label">選擇班級</div>
-        <div class="class-row" id="leave-cls-row">
-          <button class="class-chip active" onclick="selectLeaveClass('日戲一',this)">日戲一</button>
-          <button class="class-chip" onclick="selectLeaveClass('進戲一',this)">進戲一</button>
-        </div>
         <div class="f-label">學號</div>
         <input class="f-input" id="l-sid" placeholder="輸入學號">
         <div class="f-label">姓名</div>
@@ -1021,8 +1006,15 @@ const ROSTER_DATA={
 };
 
 const attendWeeks=schedule.filter(s=>s.type!=='off').map(s=>s.date);
-let rollClass='日戲一',rosterClass='日戲一',repClass='日戲一',signinClass='日戲一';
-let leaveClass='日戲一',leaveType='sick',leaveFilter='all';
+let rollClass='日戲一',rosterClass='日戲一',repClass='日戲一';
+let leaveType='sick',leaveFilter='all';
+function findStudent(sid,name){
+  for(const cls of Object.keys(getRosters())){
+    const s=(getRosters()[cls]||[]).find(x=>x.sid===sid&&x.name===name);
+    if(s)return{cls,student:s};
+  }
+  return null;
+}
 let _leavesCache=[];
 function getLeaves(){return JSON.parse(JSON.stringify(_leavesCache))}
 function saveLeaves(list){_leavesCache=list;db.collection('drama').doc('leaves').set({list})}
@@ -1081,11 +1073,6 @@ function renderGroups(q){
       <div class="grp-members">${g.m.map(n=>`<div class="grp-member${kw&&n.includes(kw)?' matched':''}">${n}</div>`).join('')}</div>
     </div>`).join('');
 }
-function selectLeaveClass(cls,btn){
-  leaveClass=cls;
-  document.querySelectorAll('#leave-cls-row .class-chip').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-}
 function renderMyLeaves(){
   const p=loadStudentProfile();
   const sec=document.getElementById('my-leaves-section');
@@ -1106,26 +1093,19 @@ function renderMyLeaves(){
 }
 
 /* ── 出席查詢 ── */
-let statusClass='日戲一';
-function selectStatusClass(cls,btn){
-  statusClass=cls;
-  document.querySelectorAll('#status-cls-row .class-chip').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('att-status-result').innerHTML='';
-}
 function checkAttStatus(){
   const sid=document.getElementById('st-sid').value.trim();
   const name=document.getElementById('st-name').value.trim();
   const res=document.getElementById('att-status-result');
   if(!sid||!name){res.innerHTML='<div class="feedback fb-err" style="display:block;margin-top:14px">請填寫學號與姓名</div>';return;}
-  const roster=(getRosters()[statusClass]||[]);
-  const found=roster.find(s=>s.sid===sid&&s.name===name);
-  if(!found){res.innerHTML='<div class="feedback fb-err" style="display:block;margin-top:14px">查無此學生，請確認班級、學號與姓名</div>';return;}
-  saveStudentProfile(statusClass,found.sid,found.name);
+  const match=findStudent(sid,name);
+  if(!match){res.innerHTML='<div class="feedback fb-err" style="display:block;margin-top:14px">查無此學生，請確認學號與姓名</div>';return;}
+  const{cls,student:found}=match;
+  saveStudentProfile(cls,found.sid,found.name);
   const curWeek=getCurrentClassDate();
   const recLabels={present:{icon:'✓',label:'出席',cls:'s-present',badge:'hb-present',text:'出席',sub:''},absent:{icon:'✗',label:'缺席',cls:'s-absent',badge:'hb-absent',text:'缺席',sub:''},signed:{icon:'✓',label:'自行簽到',cls:'s-signed',badge:'hb-signed',text:'自行簽到',sub:''},leave:{icon:'◎',label:'請假',cls:'s-leave',badge:'hb-leave',text:'請假',sub:''},null:{icon:'？',label:'尚未點名',cls:'s-none',badge:'hb-none',text:'尚未點名',sub:'老師點名後才會更新'}};
   function info(v){return recLabels[v]||recLabels['null'];}
-  const curRec=getRec(statusClass,curWeek,found.sid);
+  const curRec=getRec(cls,curWeek,found.sid);
   const curInfo=info(curRec);
   const curSch=schedule.find(x=>x.date===curWeek);
   let html=`<div class="att-status-result-wrap">
@@ -1140,7 +1120,7 @@ function checkAttStatus(){
   if(histWeeks.length>0){
     html+=`<div class="att-history-title">歷次出席紀錄</div><div class="att-history-list">`;
     histWeeks.slice().reverse().forEach(w=>{
-      const v=getRec(statusClass,w,found.sid);
+      const v=getRec(cls,w,found.sid);
       const inf=info(v);
       const sch=schedule.find(x=>x.date===w);
       html+=`<div class="att-history-row">
@@ -1181,8 +1161,9 @@ function submitLeave(){
   const week=document.getElementById('l-week').value;
   const reason=document.getElementById('l-reason').value.trim();
   if(!sid||!name||!reason){showLeaveFb('請填寫所有欄位','err');return}
-  const found=(getRosters()[leaveClass]||[]).find(s=>s.sid===sid&&s.name===name);
-  if(!found){showLeaveFb('查無此學生，請確認班級、學號與姓名','err');return}
+  const match=findStudent(sid,name);
+  if(!match){showLeaveFb('查無此學生，請確認學號與姓名','err');return}
+  const{cls:leaveClass,student:found}=match;
   saveStudentProfile(leaveClass,found.sid,found.name);
   const leaves=getLeaves();
   if(leaves.find(l=>l.cls===leaveClass&&l.sid===sid&&l.week===week)){showLeaveFb('此週已有請假申請紀錄','err');return}
@@ -1594,12 +1575,6 @@ function prefillStudentForms(){
   const p=loadStudentProfile();if(!p)return;
   ['s-sid','st-sid','l-sid'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=p.sid;});
   ['s-name','st-name','l-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=p.name;});
-  signinClass=p.cls;
-  document.querySelectorAll('#stu-signin .class-chip').forEach(b=>b.classList.toggle('active',b.textContent===p.cls));
-  leaveClass=p.cls;
-  document.querySelectorAll('#leave-cls-row .class-chip').forEach(b=>b.classList.toggle('active',b.textContent===p.cls));
-  statusClass=p.cls;
-  document.querySelectorAll('#status-cls-row .class-chip').forEach(b=>b.classList.toggle('active',b.textContent===p.cls));
 }
 function _getToken(){try{return localStorage.getItem('drama_teacher_token');}catch(e){return null;}}
 function _setToken(pwd){try{localStorage.setItem('drama_teacher_token',btoa(unescape(encodeURIComponent(pwd))));}catch(e){}}
@@ -1671,9 +1646,6 @@ function switchAttSub(id,btn){
   document.querySelectorAll('.att-subnav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('att-'+id).classList.add('active');btn.classList.add('active');
   if(id==='roster')renderRoster();if(id==='report')renderReport();if(id==='roll')renderRoll();
-}
-function selectSClass(cls,btn){
-  signinClass=cls;document.querySelectorAll('.class-chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
 }
 function updateAttBadge(){
   const cur=getCurrentClassDate();const s=schedule.find(x=>x.date===cur);
@@ -1797,8 +1769,9 @@ function doSignIn(){
   if(!sid||!name||!code){showFb('請填寫所有欄位（含簽到碼）','err');return}
   if(code!==_sessionCache.code){showFb('簽到碼錯誤，請重新確認','err');return}
   const week=getCurrentClassDate();
-  const found=(getRosters()[signinClass]||[]).find(s=>s.sid===sid&&s.name===name);
-  if(!found){showFb('查無此學生，請確認班級、學號與姓名','err');return}
+  const match=findStudent(sid,name);
+  if(!match){showFb('查無此學生，請確認學號與姓名','err');return}
+  const{cls:signinClass,student:found}=match;
   const ex=getRec(signinClass,week,found.sid);
   saveStudentProfile(signinClass,found.sid,found.name);
   if(ex==='present'||ex==='signed'){showSigninSuccess(found.name,signinClass,week);return}

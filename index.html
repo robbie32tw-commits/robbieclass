@@ -1060,6 +1060,20 @@ const GROUPS=[
   {g:'V',m:['陳羿嫙','楊晏婕','孫宜安','黃家芸','廖柏源']},
   {g:'W',m:['蔡翔丞','鄭景謙','蘇哲永','葉宥均']},
 ];
+const GRP_TIMES={
+  S:['14:20–14:24','16:20–16:24'],B:['14:24–14:28','16:24–16:28'],
+  K:['14:28–14:32','16:28–16:32'],R:['14:32–14:36','16:32–16:36'],
+  A:['14:36–14:40','16:36–16:40'],J:['14:40–14:44','16:40–16:44'],
+  O:['14:44–14:48','16:44–16:48'],E:['14:48–14:52','16:48–16:52'],
+  V:['14:52–14:56','16:52–16:56'],G:['14:56–15:00','16:56–17:00'],
+  N:['15:00–15:04','17:00–17:04'],D:['15:04–15:08','17:04–17:08'],
+  M:['15:08–15:12','17:08–17:12'],H:['15:12–15:16','17:12–17:16'],
+  Q:['15:16–15:20','17:16–17:20'],L:['15:20–15:24','17:20–17:24'],
+  C:['15:24–15:28','17:24–17:28'],I:['15:28–15:32','17:28–17:32'],
+  T:['15:32–15:36','17:32–17:36'],F:['15:36–15:40','17:36–17:40'],
+  P:['15:40–15:44','17:40–17:44'],W:['15:44–15:48','17:44–17:48'],
+  U:['15:48–15:52','17:48–17:52'],
+};
 function renderGroups(q){
   const el=document.getElementById('grp-grid');
   const kw=(q||'').trim();
@@ -1067,11 +1081,19 @@ function renderGroups(q){
   if(kw){GROUPS.forEach(g=>g.m.forEach(n=>{if(n.includes(kw))matched.add(g.g);}));}
   const visible=kw?GROUPS.filter(g=>matched.has(g.g)):GROUPS;
   if(!visible.length){el.innerHTML='<div class="grp-empty" style="grid-column:1/-1">找不到「'+kw+'」，請確認姓名</div>';return;}
-  el.innerHTML=visible.map(g=>`
-    <div class="grp-card${kw&&matched.has(g.g)?' highlight':''}">
+  el.innerHTML=visible.map(g=>{
+    const t=GRP_TIMES[g.g];
+    const timesHtml=t?`<div style="margin-bottom:8px;display:flex;flex-direction:column;gap:3px">
+      <div style="font-size:9px;font-weight:700;color:var(--mid);letter-spacing:1.5px;text-transform:uppercase;font-family:var(--f-mono);margin-bottom:2px">4/16 報告時段</div>
+      <div style="font-size:11px;font-family:var(--f-mono);color:var(--orange);font-weight:700">① ${t[0]}</div>
+      <div style="font-size:11px;font-family:var(--f-mono);color:var(--blue);font-weight:700">② ${t[1]}</div>
+    </div>`:'';
+    return`<div class="grp-card${kw&&matched.has(g.g)?' highlight':''}">
       <div class="grp-letter">組 ${g.g}</div>
+      ${timesHtml}
       <div class="grp-members">${g.m.map(n=>`<div class="grp-member${kw&&n.includes(kw)?' matched':''}">${n}</div>`).join('')}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 function renderMyLeaves(){
   const p=loadStudentProfile();

@@ -481,6 +481,12 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 .dsk-qa-btn:hover{background:rgba(255,255,255,.07);color:#fff}
 .dsk-qa-btn.danger{color:rgba(220,100,100,.65);border-color:rgba(220,100,100,.22)}
 .dsk-login-btn{padding:5px 14px;font-size:11px;font-weight:500;border:1px solid rgba(255,255,255,.18);background:none;color:rgba(255,255,255,.55);border-radius:20px;cursor:pointer;font-family:var(--f-display);touch-action:manipulation;transition:all .18s;white-space:nowrap}
+.dsk-qr-btn{padding:5px 10px;font-size:13px;background:none;border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.55);border-radius:7px;cursor:pointer;transition:all .18s;flex-shrink:0}
+.dsk-qr-btn:hover,.dsk-qr-btn.active{background:rgba(255,255,255,.1);color:#fff}
+.dsk-qr-float{position:fixed;top:66px;right:260px;background:var(--paper);border-radius:14px;padding:16px 16px 12px;box-shadow:0 8px 40px rgba(0,0,0,.22);z-index:300;display:none;flex-direction:column;align-items:center;gap:10px;border:1px solid var(--light)}
+.dsk-qr-float.open{display:flex}
+.dsk-qr-float canvas,.dsk-qr-float img{border-radius:8px;display:block}
+.dsk-qr-float-lbl{font-size:10px;font-weight:700;color:var(--mid);letter-spacing:2px;text-transform:uppercase;font-family:var(--f-mono)}
 .dsk-login-btn:hover{background:rgba(255,255,255,.08);color:#fff}
 .dsk-week-bar{display:flex;gap:5px;padding:7px 20px;overflow-x:auto;scrollbar-width:none;background:var(--card);border-bottom:1px solid var(--light);flex-shrink:0;align-items:center}
 .dsk-week-bar::-webkit-scrollbar{display:none}
@@ -541,6 +547,35 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
 .pts-hist-ts{font-size:10px;font-family:var(--f-mono);color:var(--mid);white-space:nowrap}
 .pts-hist-del{background:none;border:none;color:var(--mid);cursor:pointer;opacity:.3;padding:3px 6px;touch-action:manipulation;font-size:15px;flex-shrink:0}
 .pts-hist-del:active{opacity:1;color:#dc2626}
+/* 互評投票 */
+.vote-wrap{padding:16px 16px 24px}
+.vote-intro{background:var(--card);border:1px solid var(--light);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:var(--mid);line-height:1.7}
+.vote-intro strong{color:var(--ink)}
+.vote-id-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.vote-inp-wrap{display:flex;flex-direction:column;gap:5px}
+.vote-inp-label{font-size:11px;font-weight:700;color:var(--mid);letter-spacing:.8px;text-transform:uppercase}
+.vote-inp{width:100%;border:1.5px solid var(--light);border-radius:10px;padding:10px 12px;font-family:var(--f-display);font-size:max(16px,15px);color:var(--ink);background:var(--card);outline:none;transition:border .2s}
+.vote-inp:focus{border-color:var(--ink)}
+.vote-section-label{font-size:12px;font-weight:700;color:var(--mid);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px}
+.vote-grp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.vote-grp-btn{display:flex;align-items:center;justify-content:center;padding:14px 4px;border:1.5px solid var(--light);background:var(--card);border-radius:12px;cursor:pointer;transition:all .18s;touch-action:manipulation;font-size:20px;font-weight:700;font-family:var(--f-serif);color:var(--mid)}
+.vote-grp-btn.selected{border-color:var(--orange);background:rgba(184,149,106,.13);color:var(--ink)}
+.vote-submit-btn{width:100%;padding:15px;font-family:var(--f-display);font-size:15px;font-weight:600;background:var(--ink);color:var(--paper);border:none;cursor:pointer;border-radius:12px;letter-spacing:.08em;transition:opacity .2s,transform .15s;touch-action:manipulation;margin-bottom:10px}
+.vote-submit-btn:active{transform:scale(.97)}
+.vote-fb{padding:12px 16px;text-align:center;font-size:13px;font-weight:500;border-radius:10px;margin-bottom:10px;display:none}
+.vote-fb.ok{background:#dcfce7;color:#15803d;display:block}
+.vote-fb.err{background:#fee2e2;color:#b91c1c;display:block}
+.vote-result-btn{width:100%;padding:11px;font-family:var(--f-display);font-size:13px;font-weight:500;background:none;color:var(--mid);border:1.5px solid var(--light);cursor:pointer;border-radius:10px;letter-spacing:.03em;touch-action:manipulation;transition:all .2s}
+.vote-result-btn:hover{border-color:var(--ink);color:var(--ink)}
+.vote-result-panel{background:var(--card);border:1px solid var(--light);border-radius:12px;padding:16px;margin-top:14px}
+.vote-result-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.vote-result-sub{font-size:12px;color:var(--mid);margin-bottom:14px}
+.vote-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.vote-bar-label{font-size:13px;font-weight:700;color:var(--ink);min-width:28px;font-family:var(--f-serif)}
+.vote-bar-track{flex:1;height:10px;background:var(--light);border-radius:6px;overflow:hidden}
+.vote-bar-fill{height:10px;background:var(--orange);border-radius:6px}
+.vote-bar-n{font-size:12px;font-family:var(--f-mono);color:var(--mid);min-width:24px;text-align:right}
+.vote-result-voters{font-size:11px;font-family:var(--f-mono);color:var(--mid);margin-top:10px;padding-top:10px;border-top:1px solid var(--light);line-height:1.7}
 </style>
 </head>
 <body>
@@ -602,6 +637,7 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
   <div class="ann-tab-bar">
     <button class="ann-tab-btn active" onclick="switchAnnTab('ann-news',this)">📢 公告</button>
     <button class="ann-tab-btn" onclick="switchAnnTab('ann-groups',this)">👥 分組名單</button>
+    <button class="ann-tab-btn" onclick="switchAnnTab('ann-vote',this)">🗳️ 互評投票</button>
   </div>
   <!-- 公告 -->
   <div class="ann-pane active" id="ann-news">
@@ -625,6 +661,28 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
       <input class="grp-search" id="grp-search" placeholder="🔍 輸入姓名搜尋你的組別…" oninput="renderGroups(this.value)">
     </div>
     <div class="grp-grid" id="grp-grid"></div>
+  </div>
+  <!-- 互評投票 -->
+  <div class="ann-pane" id="ann-vote">
+    <div class="vote-wrap">
+      <div class="vote-intro"><strong>分組互評投票</strong><br>選出你欣賞的組別，可複選，也可以選自己的組。投票後可隨時回來修改。</div>
+      <div class="vote-id-row">
+        <div class="vote-inp-wrap">
+          <div class="vote-inp-label">姓名</div>
+          <input class="vote-inp" id="vote-name" placeholder="輸入姓名" oninput="voteLookup()">
+        </div>
+        <div class="vote-inp-wrap">
+          <div class="vote-inp-label">學號</div>
+          <input class="vote-inp" id="vote-sid" placeholder="輸入學號" oninput="voteLookup()">
+        </div>
+      </div>
+      <div class="vote-section-label">選出你喜歡的組別（可複選）</div>
+      <div class="vote-grp-grid" id="vote-grp-grid"></div>
+      <div class="vote-fb" id="vote-fb"></div>
+      <button class="vote-submit-btn" onclick="submitVote()">送出投票</button>
+      <button class="vote-result-btn" onclick="toggleVoteResult()">🔒 查看結果</button>
+      <div class="vote-result-panel" id="vote-result-panel" style="display:none"></div>
+    </div>
   </div>
   <!-- 版本標誌 -->
   <div class="version-bar">
@@ -892,6 +950,11 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
   <div class="dsk-week-bar" id="dsk-week-bar"></div>
   <div class="dsk-body"><div class="dsk-grid" id="dsk-grid"></div></div>
 </div>
+<!-- 桌面版 QR 浮動面板 -->
+<div id="dsk-qr-float" class="dsk-qr-float" onclick="event.stopPropagation()">
+  <div id="dsk-qr-el"></div>
+  <div class="dsk-qr-float-lbl">掃描開啟 App</div>
+</div>
 
 <!-- 密碼 modal -->
 <div class="pwd-overlay" id="pwd-overlay" onclick="cancelTeacherLogin(event)">
@@ -1032,6 +1095,101 @@ function switchAnnTab(id,btn){
   btn.classList.add('active');
   document.getElementById(id).classList.add('active');
   if(id==='ann-groups'){document.getElementById('grp-search').value='';renderGroups('');}
+  if(id==='ann-vote'){renderVotePage();}
+}
+
+/* ── 互評投票 ── */
+let _votesCache={};
+let _voteSelected=new Set();
+
+function voteKey(name,sid){return(name||'').trim()+'_'+(sid||'').trim();}
+
+function renderVoteGrpGrid(){
+  const el=document.getElementById('vote-grp-grid');
+  if(!el)return;
+  el.innerHTML=GROUPS.map(g=>`<button class="vote-grp-btn${_voteSelected.has(g.g)?' selected':''}" onclick="toggleVoteGrp('${g.g}',this)">${g.g}</button>`).join('');
+}
+
+function toggleVoteGrp(g,btn){
+  if(_voteSelected.has(g)){_voteSelected.delete(g);btn.classList.remove('selected');}
+  else{_voteSelected.add(g);btn.classList.add('selected');}
+}
+
+function voteLookup(){
+  const name=document.getElementById('vote-name').value.trim();
+  const sid=document.getElementById('vote-sid').value.trim();
+  if(!name||!sid)return;
+  const key=voteKey(name,sid);
+  const rec=(_votesCache.records||{})[key];
+  if(rec&&rec.groups){_voteSelected=new Set(rec.groups);renderVoteGrpGrid();}
+}
+
+function renderVotePage(){
+  const p=loadStudentProfile();
+  if(p){
+    const ni=document.getElementById('vote-name');
+    const si=document.getElementById('vote-sid');
+    if(ni&&!ni.value&&p.name)ni.value=p.name;
+    if(si&&!si.value&&p.sid)si.value=p.sid;
+    voteLookup();
+  }
+  renderVoteGrpGrid();
+}
+
+function submitVote(){
+  const name=document.getElementById('vote-name').value.trim();
+  const sid=document.getElementById('vote-sid').value.trim();
+  if(!name){showVoteFb('請輸入姓名','err');return;}
+  if(!sid){showVoteFb('請輸入學號','err');return;}
+  if(_voteSelected.size===0){showVoteFb('請至少選擇一個組別','err');return;}
+  const key=voteKey(name,sid);
+  const records=Object.assign({},(_votesCache.records||{}));
+  records[key]={name,sid,groups:Array.from(_voteSelected),ts:Date.now()};
+  db.collection('drama').doc('votes').set({records})
+    .then(()=>{
+      showVoteFb('✅ 已送出！你選了：'+Array.from(_voteSelected).sort().join('、')+' 組','ok');
+      saveStudentProfile('',sid,name);
+    })
+    .catch(()=>showVoteFb('送出失敗，請確認網路連線','err'));
+}
+
+function showVoteFb(msg,type){
+  const fb=document.getElementById('vote-fb');
+  if(!fb)return;
+  fb.textContent=msg;fb.className='vote-fb '+type;
+  if(type==='ok')setTimeout(()=>{fb.className='vote-fb';},5000);
+}
+
+function toggleVoteResult(){
+  const panel=document.getElementById('vote-result-panel');
+  if(!panel)return;
+  if(panel.style.display==='block'){panel.style.display='none';return;}
+  const pwd=prompt('請輸入密碼：');
+  if(pwd===null)return;
+  if(pwd!=='7265'){alert('密碼錯誤');return;}
+  panel.style.display='block';
+  renderVoteResults();
+}
+
+function renderVoteResults(){
+  const panel=document.getElementById('vote-result-panel');
+  if(!panel||panel.style.display==='none')return;
+  const records=_votesCache.records||{};
+  const voters=Object.values(records);
+  const total=voters.length;
+  const tally={};
+  GROUPS.forEach(g=>tally[g.g]=0);
+  voters.forEach(v=>(v.groups||[]).forEach(g=>{if(tally[g]!==undefined)tally[g]++;}));
+  const sorted=GROUPS.map(g=>({g:g.g,n:tally[g.g]})).sort((a,b)=>b.n-a.n);
+  const max=Math.max(1,...sorted.map(r=>r.n));
+  panel.innerHTML=`<div class="vote-result-title">投票結果</div>
+    <div class="vote-result-sub">共 ${total} 人投票</div>
+    ${sorted.map(r=>`<div class="vote-bar-row">
+      <div class="vote-bar-label">${r.g}</div>
+      <div class="vote-bar-track"><div class="vote-bar-fill" style="width:${Math.round(r.n/max*100)}%"></div></div>
+      <div class="vote-bar-n">${r.n}</div>
+    </div>`).join('')}
+    <div class="vote-result-voters">投票者：${voters.map(v=>v.name).join('、')||'（無）'}</div>`;
 }
 
 /* ── 分組名單 ── */
@@ -1289,6 +1447,7 @@ function renderDskSession(){
     const openedAtMs=openedAt&&openedAt.toDate?openedAt.toDate().getTime():Date.now();
     html=`<div class="dsk-code-wrap"><div class="dsk-code-lbl">本節簽到碼</div><div class="dsk-code-num">${code}</div></div>
       <div class="dsk-cd-wrap"><div class="dsk-cd-track"><div class="dsk-cd-fill" id="dsk-cdf"></div></div><div class="dsk-cd-text" id="dsk-cdt">—</div></div>
+      <button class="dsk-qr-btn" id="dsk-qr-btn" onclick="toggleDskQr(event)" title="顯示 QR Code">📱</button>
       <button class="dsk-close-btn" onclick="closeSession()">🔒 關閉</button>`;
     box.innerHTML=html;
     clearInterval(_dskCdInt);
@@ -1312,11 +1471,47 @@ function renderDskSession(){
   } else {
     html=`<button class="dsk-open-btn" onclick="openSession()">🔓 開啟簽到</button>
       <button class="dsk-login-btn" onclick="teacherLogout()">登出</button>`;
+    // 關閉 session 時隱藏 QR 面板
+    const qf=document.getElementById('dsk-qr-float');if(qf)qf.classList.remove('open');
+    const qb=document.getElementById('dsk-qr-btn');if(qb)qb.classList.remove('active');
   }
   box.innerHTML=html;
   // also show/hide quick action buttons
   const qa=document.getElementById('dsk-qa-row');if(qa)qa.style.display=isTeacher?'flex':'none';
 }
+let _dskLastQr='';
+function toggleDskQr(e){
+  e&&e.stopPropagation();
+  const panel=document.getElementById('dsk-qr-float');
+  const btn=document.getElementById('dsk-qr-btn');
+  if(!panel)return;
+  const willOpen=!panel.classList.contains('open');
+  panel.classList.toggle('open',willOpen);
+  if(btn)btn.classList.toggle('active',willOpen);
+  if(willOpen){
+    const qrEl=document.getElementById('dsk-qr-el');
+    const appUrl=location.href.split('#')[0].split('?')[0];
+    if(qrEl&&appUrl!==_dskLastQr){
+      _dskLastQr=appUrl;
+      qrEl.innerHTML='';
+      new QRCode(qrEl,{text:appUrl,width:160,height:160,colorDark:'#2c2520',colorLight:'#f5f2ec',correctLevel:QRCode.CorrectLevel.M});
+    }
+    // 定位到 QR 按鈕正下方
+    if(btn){
+      const r=btn.getBoundingClientRect();
+      panel.style.top=(r.bottom+8)+'px';
+      panel.style.left=(r.left-60)+'px';
+      panel.style.right='auto';
+    }
+  }
+}
+// 點其他地方關閉 QR 面板
+document.addEventListener('click',()=>{
+  const p=document.getElementById('dsk-qr-float');
+  const b=document.getElementById('dsk-qr-btn');
+  if(p)p.classList.remove('open');
+  if(b)b.classList.remove('active');
+});
 function renderDskGrid(){
   const w=dskWeek||getCurrentClassDate();
   const students=getRosters()[dskClass]||[];
@@ -2034,7 +2229,7 @@ function renderReport(){
 })();
 
 // ── 初始化：等 Firestore 兩份資料都載入後才渲染 ──
-let _attLoaded=false,_annLoaded=false,_sesLoaded=false,_leavesLoaded=false,_cfgLoaded=false,_ptsLoaded=false;
+let _attLoaded=false,_annLoaded=false,_sesLoaded=false,_leavesLoaded=false,_cfgLoaded=false,_ptsLoaded=false,_votesLoaded=false;
 
 const _overlay=document.createElement('div');
 _overlay.style.cssText='position:fixed;inset:0;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:9999';
@@ -2055,7 +2250,7 @@ _overlay.innerHTML=`
 document.body.appendChild(_overlay);
 
 function _tryInit(){
-  if(!_attLoaded||!_annLoaded||!_sesLoaded||!_leavesLoaded||!_cfgLoaded||!_ptsLoaded)return;
+  if(!_attLoaded||!_annLoaded||!_sesLoaded||!_leavesLoaded||!_cfgLoaded||!_ptsLoaded||!_votesLoaded)return;
   _overlay.remove();
   renderWeeks();renderAssign();renderAnnounces();updateNavDot();
   requestAnimationFrame(()=>setTimeout(scrollToToday,80));
@@ -2110,6 +2305,13 @@ db.collection('drama').doc('config').onSnapshot(snap=>{
     _tryInit();
   }
 },err=>{console.error('config snapshot error',err);if(!_cfgLoaded){_cfgLoaded=true;_tryInit();}});
+
+// 監聽互評投票
+db.collection('drama').doc('votes').onSnapshot(snap=>{
+  _votesCache=snap.exists?(snap.data()||{}):{};
+  if(!_votesLoaded){_votesLoaded=true;_tryInit();}
+  else{renderVoteResults();}
+},err=>{console.error('votes snapshot error',err);if(!_votesLoaded){_votesLoaded=true;_tryInit();}});
 </script>
 </body>
 </html>

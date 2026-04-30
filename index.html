@@ -272,11 +272,18 @@ body{background:var(--paper);font-family:var(--f-display);color:var(--ink);font-
 .session-qr-row{display:flex;align-items:center;justify-content:center;gap:20px;padding:14px 16px 4px}
 .session-qr-block{display:flex;flex-direction:column;align-items:center;gap:6px}
 .session-qr-label{font-size:10px;font-weight:700;color:var(--mid);letter-spacing:2px;text-transform:uppercase}
-#teacher-qr canvas,#teacher-qr img{border-radius:10px;display:block}
 .session-countdown-bar{display:flex;align-items:center;gap:8px;padding:8px 16px 0;justify-content:center}
 .session-countdown-track{flex:1;height:4px;background:var(--light);border-radius:4px;overflow:hidden;max-width:200px}
 .session-countdown-fill{height:4px;border-radius:4px;background:#15803d;transition:width 1s linear,background .5s}
 .session-countdown-text{font-size:12px;font-family:var(--f-mono);color:var(--mid);min-width:44px;text-align:right;font-weight:700}
+.qr-show-btn{padding:8px 22px;font-family:var(--f-display);font-size:13px;font-weight:600;background:none;border:1.5px solid var(--light);border-radius:20px;color:var(--mid);cursor:pointer;touch-action:manipulation;transition:all .2s;letter-spacing:.03em}
+.qr-show-btn:hover,.qr-show-btn:active{border-color:var(--ink);color:var(--ink)}
+.qr-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none;align-items:center;justify-content:center;padding:24px}
+.qr-modal-overlay.open{display:flex}
+.qr-modal{background:var(--card);border-radius:20px;padding:28px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.qr-modal-label{font-size:11px;font-weight:700;color:var(--mid);letter-spacing:2px;text-transform:uppercase}
+#teacher-qr canvas,#teacher-qr img{border-radius:10px;display:block}
+.qr-modal-close{padding:10px 32px;font-family:var(--f-display);font-size:14px;font-weight:600;background:var(--ink);color:var(--paper);border:none;border-radius:10px;cursor:pointer;touch-action:manipulation}
 .gps-row{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--light);margin-bottom:12px}
 .gps-row-label{font-size:14px;color:var(--ink);flex:1}
 .sw{position:relative;width:42px;height:24px;flex-shrink:0}
@@ -850,16 +857,13 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
         <button class="session-open-btn" onclick="openSession()">🔓 開啟本節簽到</button>
       </div>
       <div id="session-active-view" style="display:none">
-        <div class="session-qr-row">
-          <div class="session-qr-block">
-            <div class="session-qr-label">掃描開啟 App</div>
-            <div id="teacher-qr"></div>
-          </div>
-          <div class="session-code-box" style="flex:1">
-            <div class="session-code-label">本節簽到碼</div>
-            <div class="session-code-display" id="teacher-code-display">----</div>
-            <div class="session-code-sub" id="session-gps-status">—</div>
-          </div>
+        <div class="session-code-box">
+          <div class="session-code-label">本節簽到碼</div>
+          <div class="session-code-display" id="teacher-code-display">----</div>
+          <div class="session-code-sub" id="session-gps-status">—</div>
+        </div>
+        <div style="text-align:center;padding:4px 16px 10px">
+          <button class="qr-show-btn" onclick="openQrModal()">📲 顯示 QR Code</button>
         </div>
         <div class="session-countdown-bar">
           <div class="session-countdown-track"><div class="session-countdown-fill" id="countdown-fill"></div></div>
@@ -920,6 +924,15 @@ input:checked+.sw-slider:before{transform:translateX(18px)}
   </div>
 </div>
 <div class="bar"></div>
+</div>
+
+<!-- QR Code Modal -->
+<div id="qr-modal-overlay" class="qr-modal-overlay" onclick="closeQrModal()">
+  <div class="qr-modal" onclick="event.stopPropagation()">
+    <div class="qr-modal-label">掃描開啟 App</div>
+    <div id="teacher-qr"></div>
+    <button class="qr-modal-close" onclick="closeQrModal()">關閉</button>
+  </div>
 </div>
 
 <!-- 桌面版點名 -->
@@ -1815,6 +1828,8 @@ function openChangePwd(){
   document.getElementById('chpwd-overlay').classList.add('open');
   setTimeout(()=>document.getElementById('chpwd-old').focus(),100);
 }
+function openQrModal(){document.getElementById('qr-modal-overlay').classList.add('open');}
+function closeQrModal(){document.getElementById('qr-modal-overlay').classList.remove('open');}
 function closeChangePwd(e){
   if(e&&e.target!==document.getElementById('chpwd-overlay'))return;
   document.getElementById('chpwd-overlay').classList.remove('open');
